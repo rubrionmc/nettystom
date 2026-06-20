@@ -1,3 +1,4 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.thread;
 
 /**
@@ -8,8 +9,12 @@ package net.minestom.server.thread;
  *
  * @param <T> the type of the acquired object
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface Acquired<T> permits AcquiredImpl {
+    // Appelle une méthode
     T get();
 
+    // Appelle une méthode
     void unlock();
+// Fin d'un bloc/d'une expression
 }

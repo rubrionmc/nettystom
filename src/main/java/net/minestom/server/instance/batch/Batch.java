@@ -1,11 +1,18 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance.batch;
 
+// Import d'une classe nécessaire
 import net.minestom.server.instance.Instance;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import d'une classe nécessaire
 import java.util.concurrent.ExecutorService;
+// Import d'une classe nécessaire
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -26,8 +33,10 @@ import java.util.concurrent.ForkJoinPool;
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface Batch<C> extends Block.Setter {
 
+    // Appelle une méthode
     ExecutorService BLOCK_BATCH_POOL = ForkJoinPool.commonPool();
 
     /**
@@ -35,8 +44,11 @@ public interface Batch<C> extends Block.Setter {
      *
      * @return true if the batch is ready to apply
      */
+    // Début d'une méthode/d'un bloc
     default boolean isReady() {
+        // Renvoie une valeur à l'appelant
         return true;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -44,12 +56,15 @@ public interface Batch<C> extends Block.Setter {
      *
      * @see #isReady() for a non-blocking way to determine if the batch is ready
      */
+    // Début d'une méthode/d'un bloc
     default void awaitReady() {
+    // Fin d'un bloc/d'une expression
     }
 
     /**
      * Removes all block data from this batch.
      */
+    // Appelle une méthode
     void clear();
 
     /**
@@ -67,6 +82,9 @@ public interface Batch<C> extends Block.Setter {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    // Annotation pour l'élément suivant
     @UnknownNullability
+    // Appelle une méthode
     Batch<C> apply(Instance instance, @Nullable C callback);
+// Fin d'un bloc/d'une expression
 }

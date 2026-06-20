@@ -1,12 +1,16 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.utils.identity;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.text.Component;
 
+// Import d'une classe nécessaire
 import java.util.UUID;
 
 /**
  * An object with a {@link Component} name and a {@link UUID} identity.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface NamedAndIdentified {
 
     /**
@@ -14,8 +18,11 @@ public interface NamedAndIdentified {
      *
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified empty() {
+        // Renvoie une valeur à l'appelant
         return of(Component.empty(), UUID.randomUUID());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -24,8 +31,11 @@ public interface NamedAndIdentified {
      * @param name the name
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified named(String name) {
+        // Renvoie une valeur à l'appelant
         return of(name, UUID.randomUUID());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -34,8 +44,11 @@ public interface NamedAndIdentified {
      * @param name the name
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified named(Component name) {
+        // Renvoie une valeur à l'appelant
         return of(name, UUID.randomUUID());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -44,8 +57,11 @@ public interface NamedAndIdentified {
      * @param uuid the uuid
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified identified(UUID uuid) {
+        // Renvoie une valeur à l'appelant
         return of(Component.empty(), uuid);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -55,8 +71,11 @@ public interface NamedAndIdentified {
      * @param uuid the uuid
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified of(String name, UUID uuid) {
+        // Renvoie une valeur à l'appelant
         return new NamedAndIdentifiedImpl(name, uuid);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -66,8 +85,11 @@ public interface NamedAndIdentified {
      * @param uuid the uuid
      * @return the named and identified instance
      */
+    // Début d'une méthode/d'un bloc
     static NamedAndIdentified of(Component name, UUID uuid) {
+        // Renvoie une valeur à l'appelant
         return new NamedAndIdentifiedImpl(name, uuid);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -75,6 +97,7 @@ public interface NamedAndIdentified {
      *
      * @return the name
      */
+    // Appelle une méthode
     Component getName();
 
     /**
@@ -82,5 +105,7 @@ public interface NamedAndIdentified {
      *
      * @return the uuid
      */
+    // Appelle une méthode
     UUID getUuid();
+// Fin d'un bloc/d'une expression
 }

@@ -1,11 +1,18 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance;
 
+// Import d'une classe nécessaire
 import net.minestom.server.MinecraftServer;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.anvil.AnvilLoader;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
 
+// Import d'une classe nécessaire
 import java.util.Collection;
+// Import d'une classe nécessaire
 import java.util.concurrent.Phaser;
 
 /**
@@ -13,15 +20,20 @@ import java.util.concurrent.Phaser;
  * <p>
  * See {@link AnvilLoader} for the default implementation used in {@link InstanceContainer}.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface ChunkLoader {
 
     /**
      * Returns the no op chunk loader
      * @return the no op loader.
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     static ChunkLoader noop() {
+        // Renvoie une valeur à l'appelant
         return NoopChunkLoaderImpl.INSTANCE;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -29,7 +41,9 @@ public interface ChunkLoader {
      *
      * @param instance the instance to retrieve the data from
      */
+    // Début d'une méthode/d'un bloc
     default void loadInstance(Instance instance) {
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -40,9 +54,12 @@ public interface ChunkLoader {
      * @param chunkZ   the chunk Z
      * @return the chunk, or null if not present
      */
+    // Annotation pour l'élément suivant
     @Nullable Chunk loadChunk(Instance instance, int chunkX, int chunkZ);
 
+    // Début d'une méthode/d'un bloc
     default void saveInstance(Instance instance) {
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -50,6 +67,7 @@ public interface ChunkLoader {
      *
      * @param chunk the {@link Chunk} to save
      */
+    // Appelle une méthode
     void saveChunk(Chunk chunk);
 
     /**
@@ -59,26 +77,47 @@ public interface ChunkLoader {
      *
      * @param chunks the chunks to save
      */
+    // Début d'une méthode/d'un bloc
     default void saveChunks(Collection<Chunk> chunks) {
+        // Embranchement : vérifie une condition
         if (supportsParallelSaving()) {
+            // Appelle une méthode
             Phaser phaser = new Phaser(1);
+            // Boucle : répète un bloc
             for (Chunk chunk : chunks) {
+                // Appelle une méthode
                 phaser.register();
+                // Début d'une méthode/d'un bloc
                 Thread.startVirtualThread(() -> {
+                    // Gestion des exceptions
                     try {
+                        // Appelle une méthode
                         saveChunk(chunk);
+                        // Appelle une méthode
                         phaser.arriveAndDeregister();
+                    // Début d'une méthode/d'un bloc
                     } catch (Throwable e) {
+                        // Appelle une méthode
                         MinecraftServer.getExceptionManager().handleException(e);
+                    // Fin d'un bloc/d'une expression
                     }
+                // Fin d'un bloc/d'une expression
                 });
+            // Fin d'un bloc/d'une expression
             }
+            // Appelle une méthode
             phaser.arriveAndAwaitAdvance();
+        // Branche alternative de la condition
         } else {
+            // Boucle : répète un bloc
             for (Chunk chunk : chunks) {
+                // Appelle une méthode
                 saveChunk(chunk);
+            // Fin d'un bloc/d'une expression
             }
+        // Fin d'un bloc/d'une expression
         }
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -86,8 +125,11 @@ public interface ChunkLoader {
      *
      * @return true if the chunk loader supports parallel saving
      */
+    // Début d'une méthode/d'un bloc
     default boolean supportsParallelSaving() {
+        // Renvoie une valeur à l'appelant
         return false;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -95,8 +137,11 @@ public interface ChunkLoader {
      *
      * @return true if the chunk loader supports parallel loading
      */
+    // Début d'une méthode/d'un bloc
     default boolean supportsParallelLoading() {
+        // Renvoie une valeur à l'appelant
         return false;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -106,6 +151,9 @@ public interface ChunkLoader {
      *
      * @param chunk the chunk to unload
      */
+    // Début d'une méthode/d'un bloc
     default void unloadChunk(Chunk chunk) {
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

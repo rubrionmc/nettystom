@@ -1,12 +1,17 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.command.builder.condition;
 
+// Import d'une classe nécessaire
 import net.minestom.server.command.CommandSender;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Used to know if the {@link CommandSender} is allowed to run the command or a specific syntax.
  */
+// Annotation pour l'élément suivant
 @FunctionalInterface
+// Déclaration de type (classe/interface/enum/record)
 public interface CommandCondition {
 
     /**
@@ -26,5 +31,7 @@ public interface CommandCondition {
      *                      null if this is an access request
      * @return true if the sender has the right to use the command, false otherwise
      */
+    // Appelle une méthode
     boolean canUse(CommandSender sender, @Nullable String commandString);
+// Fin d'un bloc/d'une expression
 }

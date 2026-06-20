@@ -1,28 +1,52 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+// Import d'une classe nécessaire
 import net.minestom.server.Tickable;
+// Import d'une classe nécessaire
 import net.minestom.server.Viewable;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.CoordConversion;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Point;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Vec;
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.BlockHandler;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.generator.Generator;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.heightmap.Heightmap;
+// Import d'une classe nécessaire
 import net.minestom.server.network.packet.server.SendablePacket;
+// Import d'une classe nécessaire
 import net.minestom.server.snapshot.Snapshotable;
+// Import d'une classe nécessaire
 import net.minestom.server.tag.TagHandler;
+// Import d'une classe nécessaire
 import net.minestom.server.tag.Taggable;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.chunk.ChunkSupplier;
+// Import d'une classe nécessaire
 import net.minestom.server.world.DimensionType;
+// Import d'une classe nécessaire
 import net.minestom.server.world.biome.Biome;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.ApiStatus;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
 
+// Import d'une classe nécessaire
 import java.util.List;
+// Import d'une classe nécessaire
 import java.util.Set;
+// Import d'une classe nécessaire
 import java.util.UUID;
 
 // TODO light data & API
@@ -38,39 +62,65 @@ import java.util.UUID;
  * You generally want to avoid storing references of this object as this could lead to a huge memory leak,
  * you should store the chunk coordinates instead.
  */
+// Déclaration de type (classe/interface/enum/record)
 public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter, Biome.Setter, Viewable, Tickable, Taggable, Snapshotable {
+    // Affecte une valeur
     public static final int CHUNK_SIZE_X = 16;
+    // Affecte une valeur
     public static final int CHUNK_SIZE_Z = 16;
+    // Affecte une valeur
     public static final int CHUNK_SECTION_SIZE = 16;
 
+    // Instruction de code
     private final UUID identifier;
 
+    // Instruction de code
     protected Instance instance;
+    // Instruction de code
     protected final int chunkX, chunkZ;
+    // Instruction de code
     protected final int minSection, maxSection;
 
     // Options
+    // Instruction de code
     private final boolean shouldGenerate;
+    // Instruction de code
     private boolean readOnly;
 
+    // Affecte une valeur
     protected volatile boolean loaded = true;
+    // Instruction de code
     private final Viewable viewable;
 
     // Data
+    // Appelle une méthode
     private final TagHandler tagHandler = TagHandler.newHandler();
 
+    // Début d'une méthode/d'un bloc
     public Chunk(Instance instance, int chunkX, int chunkZ, boolean shouldGenerate) {
+        // Accès à l'objet courant/parent
         this.identifier = UUID.randomUUID();
+        // Accès à l'objet courant/parent
         this.instance = instance;
+        // Accès à l'objet courant/parent
         this.chunkX = chunkX;
+        // Accès à l'objet courant/parent
         this.chunkZ = chunkZ;
+        // Accès à l'objet courant/parent
         this.shouldGenerate = shouldGenerate;
+        // Appelle une méthode
         final DimensionType instanceDim = instance.getCachedDimensionType();
+        // Accès à l'objet courant/parent
         this.minSection = instanceDim.minY() / CHUNK_SECTION_SIZE;
+        // Accès à l'objet courant/parent
         this.maxSection = (instanceDim.minY() + instanceDim.height()) / CHUNK_SECTION_SIZE;
+        // Affecte une valeur
         final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
+                // Appelle une méthode
                 instanceContainer.getSharedInstances() : List.of();
+        // Accès à l'objet courant/parent
         this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -87,25 +137,40 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param z     the block Z
      * @param block the block to place
      */
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public void setBlock(int x, int y, int z, Block block) {
+        // Appelle une méthode
         setBlock(x, y, z, block, null, null);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Instruction de code
     protected abstract void setBlock(int x, int y, int z, Block block,
+                                     // Annotation pour l'élément suivant
                                      @Nullable BlockHandler.Placement placement,
+                                     // Annotation pour l'élément suivant
                                      @Nullable BlockHandler.Destroy destroy);
 
+    // Appelle une méthode
     public abstract List<Section> getSections();
 
+    // Appelle une méthode
     public abstract Section getSection(int section);
 
+    // Appelle une méthode
     public abstract Heightmap motionBlockingHeightmap();
+    // Appelle une méthode
     public abstract Heightmap worldSurfaceHeightmap();
+    // Appelle une méthode
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
+    // Début d'une méthode/d'un bloc
     public Section getSectionAt(int blockY) {
+        // Renvoie une valeur à l'appelant
         return getSection(CoordConversion.globalToChunk(blockY));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -117,7 +182,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @param time the time of the update in milliseconds
      */
+    // Annotation pour l'élément suivant
     @Override
+    // Appelle une méthode
     public abstract void tick(long time);
 
     /**
@@ -125,15 +192,23 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @param player the player
      */
+    // Début d'une méthode/d'un bloc
     public void sendChunk(Player player) {
+        // Appelle une méthode
         player.sendChunk(this);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     public void sendChunk() {
+        // Appelle une méthode
         getViewers().forEach(this::sendChunk);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Appelle une méthode
     public abstract SendablePacket getFullDataPacket();
 
     /**
@@ -146,11 +221,13 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param chunkZ   the chunk Z of the copy
      * @return a copy of this chunk with a potentially new instance and position
      */
+    // Appelle une méthode
     public abstract Chunk copy(Instance instance, int chunkX, int chunkZ);
 
     /**
      * Resets the chunk, this means clearing all the data making it empty.
      */
+    // Appelle une méthode
     public abstract void reset();
 
     /**
@@ -160,8 +237,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the chunk identifier
      */
+    // Début d'une méthode/d'un bloc
     public UUID getIdentifier() {
+        // Renvoie une valeur à l'appelant
         return identifier;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -169,8 +249,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the linked instance
      */
+    // Début d'une méthode/d'un bloc
     public Instance getInstance() {
+        // Renvoie une valeur à l'appelant
         return instance;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -178,8 +261,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the chunk X
      */
+    // Début d'une méthode/d'un bloc
     public int getChunkX() {
+        // Renvoie une valeur à l'appelant
         return chunkX;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -187,8 +273,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the chunk Z
      */
+    // Début d'une méthode/d'un bloc
     public int getChunkZ() {
+        // Renvoie une valeur à l'appelant
         return chunkZ;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -196,8 +285,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the lowest (inclusive) section Y available in this chunk
      */
+    // Début d'une méthode/d'un bloc
     public int getMinSection() {
+        // Renvoie une valeur à l'appelant
         return minSection;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -205,8 +297,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the highest (exclusive) section Y available in this chunk
      */
+    // Début d'une méthode/d'un bloc
     public int getMaxSection() {
+        // Renvoie une valeur à l'appelant
         return maxSection;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -214,8 +309,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return the position of this chunk
      */
+    // Début d'une méthode/d'un bloc
     public Point toPosition() {
+        // Renvoie une valeur à l'appelant
         return new Vec(CHUNK_SIZE_X * getChunkX(), 0, CHUNK_SIZE_Z * getChunkZ());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -225,8 +323,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if this chunk is affected by a {@link Generator}
      */
+    // Début d'une méthode/d'un bloc
     public boolean shouldGenerate() {
+        // Renvoie une valeur à l'appelant
         return shouldGenerate;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -237,8 +338,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if the chunk is read-only
      */
+    // Début d'une méthode/d'un bloc
     public boolean isReadOnly() {
+        // Renvoie une valeur à l'appelant
         return readOnly;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -249,8 +353,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @param readOnly true to make the chunk read-only, false otherwise
      */
+    // Début d'une méthode/d'un bloc
     public void setReadOnly(boolean readOnly) {
+        // Accès à l'objet courant/parent
         this.readOnly = readOnly;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -258,54 +365,84 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      *
      * @return true if the chunk is loaded
      */
+    // Début d'une méthode/d'un bloc
     public boolean isLoaded() {
+        // Renvoie une valeur à l'appelant
         return loaded;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
      * Called when the chunk has been successfully loaded.
      */
+    // Instruction de code
     protected void onLoad() {}
 
     /**
      * Called when the chunk generator has finished generating the chunk.
      */
+    // Instruction de code
     public void onGenerate() {}
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public String toString() {
+        // Renvoie une valeur à l'appelant
         return getClass().getSimpleName() + "[" + chunkX + ":" + chunkZ + "]";
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public boolean addViewer(Player player) {
+        // Renvoie une valeur à l'appelant
         return viewable.addViewer(player);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public boolean removeViewer(Player player) {
+        // Renvoie une valeur à l'appelant
         return viewable.removeViewer(player);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public Set<Player> getViewers() {
+        // Renvoie une valeur à l'appelant
         return viewable.getViewers();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public TagHandler tagHandler() {
+        // Renvoie une valeur à l'appelant
         return tagHandler;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
      * Sets the chunk as "unloaded".
      */
+    // Début d'une méthode/d'un bloc
     protected void unload() {
+        // Accès à l'objet courant/parent
         this.loaded = false;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
      * Invalidate the chunk caches
      */
+    // Appelle une méthode
     public abstract void invalidate();
+// Fin d'un bloc/d'une expression
 }

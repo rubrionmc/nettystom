@@ -1,11 +1,18 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.thread;
 
+// Import d'une classe nécessaire
 import net.minestom.server.Tickable;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.ApiStatus;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Unmodifiable;
 
+// Import d'une classe nécessaire
 import java.util.List;
+// Import d'une classe nécessaire
 import java.util.function.IntFunction;
 
 /**
@@ -22,6 +29,7 @@ import java.util.function.IntFunction;
  * @see Acquirable
  * @see AcquirableSource
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDispatcherImpl {
     /**
      * Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
@@ -32,9 +40,13 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @param <P>         the dispatcher partition type
      * @return a new ThreadDispatcher instance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider, int threadCount) {
+        // Renvoie une valeur à l'appelant
         return new ThreadDispatcherImpl<>(provider, threadCount, TickThread::new);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -48,10 +60,15 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @param <P>           the dispatcher partition type
      * @return a new ThreadDispatcher instance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Instruction de code
     static <P, E extends Tickable> ThreadDispatcher<P, E> dispatcher(ThreadProvider<P> provider,
+                                                                              // Début d'une méthode/d'un bloc
                                                                               IntFunction<String> nameGenerator, int threadCount) {
+        // Renvoie une valeur à l'appelant
         return new ThreadDispatcherImpl<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -61,9 +78,13 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * @param <P> the dispatcher partition type
      * @return a new ThreadDispatcher instance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     static <P, E extends Tickable> ThreadDispatcher<P, E> singleThread() {
+        // Renvoie une valeur à l'appelant
         return dispatcher(ThreadProvider.counter(), 1);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -73,8 +94,11 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @return the TickThreads used to dispatch updates
      */
+    // Annotation pour l'élément suivant
     @Unmodifiable
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Appelle une méthode
     List<TickThread> threads();
 
     /**
@@ -82,6 +106,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @param time the tick time in nanos
      */
+    // Appelle une méthode
     void updateAndAwait(long time);
 
     /**
@@ -90,14 +115,18 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @param nanoTimeout max time in nanoseconds to update partitions
      */
+    // Appelle une méthode
     void refreshThreads(long nanoTimeout);
 
     /**
      * Refreshes all thread as per {@link ThreadDispatcher#refreshThreads(long)}, with a timeout of
      * {@link Long#MAX_VALUE}.
      */
+    // Début d'une méthode/d'un bloc
     default void refreshThreads() {
+        // Appelle une méthode
         refreshThreads(Long.MAX_VALUE);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -110,22 +139,35 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @param update the update to signal
      */
+    // Appelle une méthode
     void signalUpdate(ThreadDispatcher.Update<P, E> update);
 
+    // Début d'une méthode/d'un bloc
     default void createPartition(P partition) {
+        // Appelle une méthode
         signalUpdate(new Update.PartitionLoad<>(partition));
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void deletePartition(P partition) {
+        // Appelle une méthode
         signalUpdate(new Update.PartitionUnload<>(partition));
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void updateElement(E element, P partition) {
+        // Appelle une méthode
         signalUpdate(new Update.ElementUpdate<>(element, partition));
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void removeElement(E element) {
+        // Appelle une méthode
         signalUpdate(new Update.ElementRemove<>(element));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -133,6 +175,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * <p>
      * This will throw an {@link IllegalThreadStateException} if the threads have already been started.
      */
+    // Appelle une méthode
     void start();
 
     /**
@@ -140,6 +183,7 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      *
      * @return true if all threads are alive, false otherwise
      */
+    // Appelle une méthode
     boolean isAlive();
 
     /**
@@ -147,10 +191,14 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
      * <p>
      * Action is irreversible.
      */
+    // Appelle une méthode
     void shutdown();
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Annotation pour l'élément suivant
     @SuppressWarnings("unused")
+    // Déclaration de type (classe/interface/enum/record)
     sealed interface Update<P, E> {
 
         /**
@@ -158,7 +206,9 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to register
          */
+        // Déclaration de type (classe/interface/enum/record)
         record PartitionLoad<P, E>(P partition) implements Update<P, E> {
+        // Fin d'un bloc/d'une expression
         }
 
         /**
@@ -166,7 +216,9 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param partition the partition to delete
          */
+        // Déclaration de type (classe/interface/enum/record)
         record PartitionUnload<P, E>(P partition) implements Update<P, E> {
+        // Fin d'un bloc/d'une expression
         }
 
         /**
@@ -175,7 +227,9 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          * @param element   the element to update
          * @param partition the partition the Tickable is part of
          */
+        // Déclaration de type (classe/interface/enum/record)
         record ElementUpdate<P, E>(E element, P partition) implements Update<P, E> {
+        // Fin d'un bloc/d'une expression
         }
 
         /**
@@ -183,7 +237,11 @@ public sealed interface ThreadDispatcher<P, E extends Tickable> permits ThreadDi
          *
          * @param element the element to remove
          */
+        // Déclaration de type (classe/interface/enum/record)
         record ElementRemove<P, E>(E element) implements Update<P, E> {
+        // Fin d'un bloc/d'une expression
         }
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

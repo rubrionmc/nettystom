@@ -1,10 +1,16 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance.generator;
 
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Point;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
+// Import d'une classe nécessaire
 import net.minestom.server.registry.RegistryKey;
+// Import d'une classe nécessaire
 import net.minestom.server.world.biome.Biome;
 
+// Déclaration de type (classe/interface/enum/record)
 public interface UnitModifier extends Block.Setter, Biome.Setter {
     /**
      * Sets the block relative to the absolute position of the unit.
@@ -14,6 +20,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param z     the z coordinate
      * @param block the block to set
      */
+    // Appelle une méthode
     void setRelative(int x, int y, int z, Block block);
 
     /**
@@ -21,6 +28,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      *
      * @param supplier the supplier of the block to set
      */
+    // Appelle une méthode
     void setAll(Supplier supplier);
 
     /**
@@ -28,6 +36,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      *
      * @param supplier the supplier of the block to set
      */
+    // Appelle une méthode
     void setAllRelative(Supplier supplier);
 
     /**
@@ -35,6 +44,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      *
      * @param block the block to fill
      */
+    // Appelle une méthode
     void fill(Block block);
 
     /**
@@ -44,6 +54,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param end   the end (max) point of the area
      * @param block the block to fill
      */
+    // Appelle une méthode
     void fill(Point start, Point end, Block block);
 
     /**
@@ -53,6 +64,7 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      * @param maxHeight the maximum height of the area
      * @param block     the block to fill
      */
+    // Appelle une méthode
     void fillHeight(int minHeight, int maxHeight, Block block);
 
     /**
@@ -60,9 +72,14 @@ public interface UnitModifier extends Block.Setter, Biome.Setter {
      *
      * @param biome the biome to fill
      */
+    // Appelle une méthode
     void fillBiome(RegistryKey<Biome> biome);
 
+    // Déclaration de type (classe/interface/enum/record)
     interface Supplier {
+        // Appelle une méthode
         Block get(int x, int y, int z);
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

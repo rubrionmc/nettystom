@@ -1,9 +1,14 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.codec;
 
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import d'une classe nécessaire
 import java.util.Objects;
+// Import d'une classe nécessaire
 import java.util.function.Function;
 
 /**
@@ -18,6 +23,7 @@ import java.util.function.Function;
  *
  * @param <T> the type, can be nullable.
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
@@ -26,7 +32,9 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param value the value of {@link T}
      * @param <T>   the value type
      */
+    // Déclaration de type (classe/interface/enum/record)
     record Ok<T extends @UnknownNullability Object>(T value) implements Result<T> {
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -35,10 +43,15 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param message the message
      * @param <T>     the type
      */
+    // Déclaration de type (classe/interface/enum/record)
     record Error<T>(String message) implements Result<T> {
+        // Début d'une méthode/d'un bloc
         public Error {
+            // Appelle une méthode
             Objects.requireNonNull(message, "Message cannot be null");
+        // Fin d'un bloc/d'une expression
         }
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -49,9 +62,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param <S>    the type of the result.
      * @return the new result or the error.
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default <S extends @UnknownNullability Object> Result<S> map(Function<T, Result<S>> mapper) {
+        // Renvoie une valeur à l'appelant
         return this instanceof Ok<T>(T value) ? mapper.apply(value) : cast();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -64,9 +81,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param <S>    the type of the result.
      * @return the new result or the error.
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default <S extends @UnknownNullability Object> Result<S> mapResult(Function<T, S> mapper) {
+        // Renvoie une valeur à l'appelant
         return this instanceof Ok<T>(T value) ? new Ok<>(mapper.apply(value)) : cast();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -78,9 +99,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param mapper the new result
      * @return the new result or the error.
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default Result<T> mapError(Function<String, String> mapper) {
+        // Renvoie une valeur à l'appelant
         return this instanceof Error<?>(String message) ? new Error<>(mapper.apply(message)) : this;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -89,10 +114,15 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param other value to be returned
      * @return the resultant
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default @UnknownNullability T orElse(@UnknownNullability T other) {
+        // Renvoie une valeur à l'appelant
         return this instanceof Ok<T>(T value)
+                // Instruction de code
                 ? value : other;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -101,12 +131,19 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the value
      * @throws IllegalStateException if this instance of {@link Error}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default T orElseThrow() {
+        // Renvoie une valeur à l'appelant
         return switch (this) {
+            // Embranchement multiple (switch/case)
             case Ok<T>(T value) -> value;
+            // Embranchement multiple (switch/case)
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(errorMessage);
+        // Fin d'un bloc/d'une expression
         };
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -116,14 +153,23 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the value
      * @throws IllegalStateException if this instance of {@link Error}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default T orElseThrow(String message) {
+        // Renvoie une valeur à l'appelant
         return switch (this) {
+            // Embranchement multiple (switch/case)
             case Ok<T>(T value) -> value;
+            // Embranchement multiple (switch/case)
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(
+                    // Instruction de code
                     String.format("%s: %s", message, errorMessage)
+            // Fin d'un bloc/d'une expression
             );
+        // Fin d'un bloc/d'une expression
         };
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -135,12 +181,20 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the error
      * @throws ClassCastException if the result is not {@link Error}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Annotation pour l'élément suivant
     @SuppressWarnings("unchecked")
+    // Début d'une méthode/d'un bloc
     default <S> Result.Error<S> cast() {
+        // Embranchement : vérifie une condition
         if (!(this instanceof Result.Error<?>))
+            // Lève une exception
             throw new ClassCastException("Cannot cast a Result.Ok to a Result.Error");
+        // Renvoie une valeur à l'appelant
         return (Result.Error<S>) this;
+    // Fin d'un bloc/d'une expression
     }
 
+// Fin d'un bloc/d'une expression
 }
