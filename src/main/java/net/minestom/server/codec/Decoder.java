@@ -1,5 +1,7 @@
+// Package declaration for this file
 package net.minestom.server.codec;
 
+// Import of a required class
 import org.jetbrains.annotations.UnknownNullability;
 
 
@@ -22,7 +24,9 @@ import org.jetbrains.annotations.UnknownNullability;
  *
  * @param <T> the value type
  */
+// Annotation for the following element
 @FunctionalInterface
+// Type declaration (class/interface/enum/record)
 public interface Decoder<T extends @UnknownNullability Object> {
 
     /**
@@ -32,13 +36,21 @@ public interface Decoder<T extends @UnknownNullability Object> {
      * @param <T>   the type of value
      * @return the unit decoder
      */
+    // Start of a method/block
     static <T> Decoder<T> unit(T value) {
+        // Returns a value to the caller
         return new Decoder<>() {
+            // Annotation for the following element
             @Override
+            // Start of a method/block
             public <D> Result<T> decode(Transcoder<D> coder, D ignored) {
+                // Returns a value to the caller
                 return new Result.Ok<>(value);
+            // End of a block/expression
             }
+        // End of a block/expression
         };
+    // End of a block/expression
     }
 
     /**
@@ -51,6 +63,8 @@ public interface Decoder<T extends @UnknownNullability Object> {
      * @param <D>   The value type
      * @return the {@link Result} of the encoding with its type determined by the transcoder
      */
+    // Calls a method
     <D> Result<T> decode(Transcoder<D> coder, D value);
 
+// End of a block/expression
 }

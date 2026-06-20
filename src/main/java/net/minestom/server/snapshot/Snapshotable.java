@@ -1,5 +1,7 @@
+// Package declaration for this file
 package net.minestom.server.snapshot;
 
+// Import of a required class
 import org.jetbrains.annotations.ApiStatus;
 
 /**
@@ -7,7 +9,9 @@ import org.jetbrains.annotations.ApiStatus;
  * <p>
  * Implementations must be identity-based.
  */
+// Annotation for the following element
 @ApiStatus.Experimental
+// Type declaration (class/interface/enum/record)
 public interface Snapshotable {
 
     /**
@@ -21,7 +25,11 @@ public interface Snapshotable {
      * @param updater the snapshot updater/context
      * @return the updated snapshot
      */
+    // Start of a method/block
     default Snapshot updateSnapshot(SnapshotUpdater updater) {
+        // Throws an exception
         throw new UnsupportedOperationException("Snapshot is not supported for this object");
+    // End of a block/expression
     }
+// End of a block/expression
 }

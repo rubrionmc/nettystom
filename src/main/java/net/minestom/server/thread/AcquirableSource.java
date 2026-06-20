@@ -1,8 +1,12 @@
+// Package declaration for this file
 package net.minestom.server.thread;
 
+// Import of a required class
 import org.jetbrains.annotations.ApiStatus;
 
+// Import of a required class
 import java.util.function.Consumer;
+// Import of a required class
 import java.util.function.Function;
 
 /**
@@ -10,7 +14,9 @@ import java.util.function.Function;
  *
  * @param <T> the type of the acquired object
  */
+// Annotation for the following element
 @ApiStatus.Experimental
+// Type declaration (class/interface/enum/record)
 public interface AcquirableSource<T> {
     /**
      * Obtains an {@link Acquirable}. To safely perform operations on this object, the user must call
@@ -19,5 +25,7 @@ public interface AcquirableSource<T> {
      *
      * @return an Acquirable which can be used to synchronize access to this object
      */
+    // Calls a method
     Acquirable<? extends T> acquirable();
+// End of a block/expression
 }

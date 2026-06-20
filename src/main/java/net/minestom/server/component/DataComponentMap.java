@@ -1,15 +1,26 @@
+// Package declaration for this file
 package net.minestom.server.component;
 
+// Import of a required class
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+// Import of a required class
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+// Import of a required class
 import net.minestom.server.codec.Codec;
+// Import of a required class
 import net.minestom.server.network.NetworkBuffer;
+// Import of a required class
 import net.minestom.server.utils.Unit;
+// Import of a required class
 import org.jetbrains.annotations.ApiStatus;
+// Import of a required class
 import org.jetbrains.annotations.Nullable;
 
+// Import of a required class
 import java.util.Collection;
+// Import of a required class
 import java.util.function.Function;
+// Import of a required class
 import java.util.function.IntFunction;
 
 /**
@@ -18,79 +29,131 @@ import java.util.function.IntFunction;
  * <p>This type is capable of storing a patch of added and removed components on top of a 'prototype', or existing
  * set of components. See {@link #diff(DataComponentMap, DataComponentMap)}.</p>
  */
+// Annotation for the following element
 @ApiStatus.Experimental
+// Type declaration (class/interface/enum/record)
 public sealed interface DataComponentMap extends DataComponent.Holder permits DataComponentMapImpl {
+    // Calls a method
     DataComponentMap EMPTY = new DataComponentMapImpl(Int2ObjectMaps.emptyMap());
 
+    // Start of a method/block
     static DataComponentMap.Builder builder() {
+        // Returns a value to the caller
         return new DataComponentMapImpl.BuilderImpl(new Int2ObjectArrayMap<>());
+    // End of a block/expression
     }
 
+    // Start of a method/block
     static DataComponentMap.PatchBuilder patchBuilder() {
+        // Returns a value to the caller
         return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
+    // End of a block/expression
     }
 
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Code statement
     static NetworkBuffer.Type<DataComponentMap> networkType(
+            // Start of a method/block
             IntFunction<DataComponent<?>> idToType) {
+        // Returns a value to the caller
         return new DataComponentMapImpl.NetworkTypeImpl(idToType, false, true);
+    // End of a block/expression
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Code statement
     static Codec<DataComponentMap> codec(
+            // Code statement
             IntFunction<DataComponent<?>> idToType,
+            // Code statement
             Function<String, DataComponent<?>> nameToType
+    // Start of a method/block
     ) {
+        // Returns a value to the caller
         return new DataComponentMapImpl.CodecImpl(idToType, nameToType, false);
+    // End of a block/expression
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Start of a method/block
     static NetworkBuffer.Type<DataComponentMap> patchNetworkType(IntFunction<DataComponent<?>> idToType, boolean trusted) {
+        // Returns a value to the caller
         return new DataComponentMapImpl.NetworkTypeImpl(idToType, true, trusted);
+    // End of a block/expression
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Code statement
     static Codec<DataComponentMap> patchCodec(
+            // Code statement
             IntFunction<DataComponent<?>> idToType,
+            // Code statement
             Function<String, DataComponent<?>> nameToType
+    // Start of a method/block
     ) {
+        // Returns a value to the caller
         return new DataComponentMapImpl.CodecImpl(idToType, nameToType, true);
+    // End of a block/expression
     }
 
+    // Start of a method/block
     static DataComponentMap diff(DataComponentMap prototype, DataComponentMap patch) {
+        // Calls a method
         final DataComponentMapImpl patchImpl = (DataComponentMapImpl) patch;
+        // Branch: checks a condition
         if (patchImpl.components().isEmpty()) return EMPTY;
 
+        // Calls a method
         final DataComponentMapImpl protoImpl = (DataComponentMapImpl) prototype;
 
+        // Calls a method
         final Int2ObjectArrayMap<@Nullable Object> diff = new Int2ObjectArrayMap<>(patchImpl.components());
+        // Calls a method
         var iter = diff.int2ObjectEntrySet().fastIterator();
+        // Loop: repeats a block
         while (iter.hasNext()) {
+            // Assigns a value
             final var entry = iter.next(); // Entry in patch
+            // Assigns a value
             final var protoComp = protoImpl.components().get(entry.getIntKey()); // Entry in prototype
+            // Branch: checks a condition
             if (entry.getValue() == null) {
                 // If the component is removed, remove it from the diff if it is not in the prototype
+                // Branch: checks a condition
                 if (!protoImpl.components().containsKey(entry.getIntKey())) {
+                    // Calls a method
                     iter.remove();
+                // End of a block/expression
                 }
+            // Branch: checks a condition
             } else if (protoComp != null && protoComp.equals(entry.getValue())) {
                 // If the component is the same as in the prototype, remove it from the diff
+                // Calls a method
                 iter.remove();
+            // End of a block/expression
             }
+        // End of a block/expression
         }
 
+        // Returns a value to the caller
         return new DataComponentMapImpl(diff);
+    // End of a block/expression
     }
 
+    // Calls a method
     boolean isEmpty();
 
     /**
@@ -101,6 +164,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @param component The component to check
      * @return True if the component is present (taking into account the prototype).
      */
+    // Calls a method
     boolean has(DataComponentMap prototype, DataComponent<?> component);
 
     /**
@@ -112,6 +176,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @return The value of the component, or null if not present (taking into account the prototype).
      * @param <T> The type of the component
      */
+    // Calls a method
     <T> @Nullable T get(DataComponentMap prototype, DataComponent<T> component);
 
     /**
@@ -124,10 +189,14 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @param <T> the data component type
      * @return A new map with the component set to the value
      */
+    // Calls a method
     <T> DataComponentMap set(DataComponent<T> component, T value);
 
+    // Start of a method/block
     default DataComponentMap set(DataComponent<Unit> component) {
+        // Returns a value to the caller
         return set(component, Unit.INSTANCE);
+    // End of a block/expression
     }
 
     /**
@@ -136,36 +205,56 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * @param component The component to remove
      * @return A new map with the component removed
      */
+    // Calls a method
     DataComponentMap remove(DataComponent<?> component);
 
+    // Calls a method
     Collection<DataComponent.Value> entrySet();
 
+    // Calls a method
     Builder toBuilder();
 
+    // Calls a method
     PatchBuilder toPatchBuilder();
 
+    // Type declaration (class/interface/enum/record)
     sealed interface Builder extends DataComponent.Holder permits DataComponentMapImpl.BuilderImpl {
 
+        // Calls a method
         <T> Builder set(DataComponent<T> component, T value);
 
+        // Start of a method/block
         default Builder set(DataComponent<Unit> component) {
+            // Returns a value to the caller
             return set(component, Unit.INSTANCE);
+        // End of a block/expression
         }
 
+        // Calls a method
         DataComponentMap build();
+    // End of a block/expression
     }
 
+    // Type declaration (class/interface/enum/record)
     sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
 
+        // Calls a method
         <T> PatchBuilder set(DataComponent<T> component, T value);
 
+        // Start of a method/block
         default PatchBuilder set(DataComponent<Unit> component) {
+            // Returns a value to the caller
             return set(component, Unit.INSTANCE);
+        // End of a block/expression
         }
 
+        // Calls a method
         PatchBuilder remove(DataComponent<?> component);
 
+        // Calls a method
         DataComponentMap build();
+    // End of a block/expression
     }
 
+// End of a block/expression
 }

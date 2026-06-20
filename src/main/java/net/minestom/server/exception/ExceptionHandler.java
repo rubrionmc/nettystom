@@ -1,3 +1,4 @@
+// Package declaration for this file
 package net.minestom.server.exception;
 
 /**
@@ -5,7 +6,9 @@ package net.minestom.server.exception;
  * <p>
  * Sets with {@link ExceptionManager#setExceptionHandler(ExceptionHandler)}.
  */
+// Annotation for the following element
 @FunctionalInterface
+// Type declaration (class/interface/enum/record)
 public interface ExceptionHandler {
 
     /**
@@ -13,5 +16,7 @@ public interface ExceptionHandler {
      *
      * @param e the thrown exception
      */
+    // Calls a method
     void handleException(Throwable e);
+// End of a block/expression
 }
