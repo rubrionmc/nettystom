@@ -1,8 +1,13 @@
+// Package declaration for this file
 package net.minestom.server.event.instance;
 
+// Import of a required class
 import net.minestom.server.coordinate.BlockVec;
+// Import of a required class
 import net.minestom.server.event.trait.BlockEvent;
+// Import of a required class
 import net.minestom.server.instance.Instance;
+// Import of a required class
 import net.minestom.server.instance.block.Block;
 
 /**
@@ -11,29 +16,51 @@ import net.minestom.server.instance.block.Block;
  * This event is triggered when a block's state changes from its instance.
  * If you wish to listen to all block updates, must be used in conjunction with {@link InstanceSectionInvalidateEvent}
  */
+// Type declaration (class/interface/enum/record)
 public class InstanceBlockUpdateEvent implements BlockEvent {
+    // Code statement
     private final Instance instance;
+    // Code statement
     private final BlockVec blockPosition;
+    // Code statement
     private final Block block;
 
+    // Start of a method/block
     public InstanceBlockUpdateEvent(Instance instance, BlockVec blockPosition, Block block) {
+        // Access to the current/parent object
         this.instance = instance;
+        // Access to the current/parent object
         this.blockPosition = blockPosition;
+        // Access to the current/parent object
         this.block = block;
+    // End of a block/expression
     }
 
+    // Annotation for the following element
     @Override
+    // Start of a method/block
     public Block getBlock() {
+        // Returns a value to the caller
         return block;
+    // End of a block/expression
     }
 
+    // Annotation for the following element
     @Override
+    // Start of a method/block
     public BlockVec getBlockPosition() {
+        // Returns a value to the caller
         return blockPosition;
+    // End of a block/expression
     }
 
+    // Annotation for the following element
     @Override
+    // Start of a method/block
     public Instance getInstance() {
+        // Returns a value to the caller
         return instance;
+    // End of a block/expression
     }
+// End of a block/expression
 }

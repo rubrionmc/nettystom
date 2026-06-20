@@ -1,11 +1,18 @@
+// Package declaration for this file
 package net.minestom.server.instance.batch;
 
+// Import of a required class
 import net.minestom.server.instance.Instance;
+// Import of a required class
 import net.minestom.server.instance.block.Block;
+// Import of a required class
 import org.jetbrains.annotations.Nullable;
+// Import of a required class
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import of a required class
 import java.util.concurrent.ExecutorService;
+// Import of a required class
 import java.util.concurrent.ForkJoinPool;
 
 /**
@@ -26,8 +33,10 @@ import java.util.concurrent.ForkJoinPool;
  * @see AbsoluteBlockBatch
  * @see RelativeBlockBatch
  */
+// Type declaration (class/interface/enum/record)
 public interface Batch<C> extends Block.Setter {
 
+    // Calls a method
     ExecutorService BLOCK_BATCH_POOL = ForkJoinPool.commonPool();
 
     /**
@@ -35,8 +44,11 @@ public interface Batch<C> extends Block.Setter {
      *
      * @return true if the batch is ready to apply
      */
+    // Start of a method/block
     default boolean isReady() {
+        // Returns a value to the caller
         return true;
+    // End of a block/expression
     }
 
     /**
@@ -44,12 +56,15 @@ public interface Batch<C> extends Block.Setter {
      *
      * @see #isReady() for a non-blocking way to determine if the batch is ready
      */
+    // Start of a method/block
     default void awaitReady() {
+    // End of a block/expression
     }
 
     /**
      * Removes all block data from this batch.
      */
+    // Calls a method
     void clear();
 
     /**
@@ -67,6 +82,9 @@ public interface Batch<C> extends Block.Setter {
      * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    // Annotation for the following element
     @UnknownNullability
+    // Calls a method
     Batch<C> apply(Instance instance, @Nullable C callback);
+// End of a block/expression
 }

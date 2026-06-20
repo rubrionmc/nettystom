@@ -1,18 +1,27 @@
+// Package declaration for this file
 package net.minestom.server.collision;
 
+// Import of a required class
 import net.minestom.server.coordinate.Point;
+// Import of a required class
 import net.minestom.server.entity.Entity;
+// Import of a required class
 import net.minestom.server.instance.block.BlockFace;
 
+// Type declaration (class/interface/enum/record)
 public interface Shape {
+    // Calls a method
     boolean isOccluded(Shape shape, BlockFace face);
 
     /**
      * Returns true if the given block face is completely covered by this shape, false otherwise.
      * @param face The face to test
      */
+    // Start of a method/block
     default boolean isFaceFull(BlockFace face) {
+        // Returns a value to the caller
         return false;
+    // End of a block/expression
     }
 
     /**
@@ -22,6 +31,7 @@ public interface Shape {
      * @param boundingBox      Bounding box to check for intersections with
      * @return is an intersection found
      */
+    // Calls a method
     boolean intersectBox(Point positionRelative, BoundingBox boundingBox);
 
     /**
@@ -34,7 +44,9 @@ public interface Shape {
      * @param finalResult  Stores final SweepResult
      * @return is an intersection found
      */
+    // Code statement
     boolean intersectBoxSwept(Point rayStart, Point rayDirection,
+                              // Code statement
                               Point shapePos, BoundingBox moving, SweepResult finalResult);
 
 
@@ -44,8 +56,11 @@ public interface Shape {
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
      */
+    // Start of a method/block
     default boolean intersectEntity(Point src, Entity entity) {
+        // Returns a value to the caller
         return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
+    // End of a block/expression
     }
 
     /**
@@ -53,6 +68,7 @@ public interface Shape {
      *
      * @return Start of shape
      */
+    // Calls a method
     Point relativeStart();
 
     /**
@@ -60,5 +76,7 @@ public interface Shape {
      *
      * @return End of shape
      */
+    // Calls a method
     Point relativeEnd();
+// End of a block/expression
 }

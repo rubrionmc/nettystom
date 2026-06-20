@@ -1,23 +1,36 @@
+// Package declaration for this file
 package net.minestom.server.event.server;
 
+// Import of a required class
 import net.minestom.server.event.trait.AsyncEvent;
+// Import of a required class
 import net.minestom.server.event.trait.CancellableEvent;
+// Import of a required class
 import net.minestom.server.network.player.PlayerConnection;
+// Import of a required class
 import net.minestom.server.ping.ServerListPingType;
+// Import of a required class
 import net.minestom.server.ping.Status;
+// Import of a required class
 import org.jetbrains.annotations.Nullable;
 
+// Import of a required class
 import java.util.Objects;
 
 /**
  * Called when a {@link PlayerConnection} sends a status packet,
  * usually to display information on the server list.
  */
+// Type declaration (class/interface/enum/record)
 public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
+    // Code statement
     private final PlayerConnection connection;
+    // Code statement
     private final ServerListPingType type;
 
+    // Code statement
     private boolean cancelled;
+    // Code statement
     private Status status;
 
     /**
@@ -25,8 +38,11 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @param type the ping type to respond with
      */
+    // Start of a method/block
     public ServerListPingEvent(ServerListPingType type) {
+        // Calls a method
         this(null, type);
+    // End of a block/expression
     }
 
     /**
@@ -35,10 +51,15 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      * @param connection the player connection, if the ping type is modern
      * @param type       the ping type to respond with
      */
+    // Start of a method/block
     public ServerListPingEvent(@Nullable PlayerConnection connection, ServerListPingType type) {
+        // Access to the current/parent object
         this.status = Status.builder().build();
+        // Access to the current/parent object
         this.connection = connection;
+        // Access to the current/parent object
         this.type = type;
+    // End of a block/expression
     }
 
     /**
@@ -47,8 +68,11 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @return the response data being returned
      */
+    // Start of a method/block
     public Status getStatus() {
+        // Returns a value to the caller
         return status;
+    // End of a block/expression
     }
 
     /**
@@ -56,8 +80,11 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @param status the new data
      */
+    // Start of a method/block
     public void setStatus(Status status) {
+        // Access to the current/parent object
         this.status = Objects.requireNonNull(status);
+    // End of a block/expression
     }
 
     /**
@@ -66,8 +93,11 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @return the playerConnection.
      */
+    // Start of a method/block
     public @Nullable PlayerConnection getConnection() {
+        // Returns a value to the caller
         return connection;
+    // End of a block/expression
     }
 
     /**
@@ -75,13 +105,20 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @return the ping type
      */
+    // Start of a method/block
     public ServerListPingType getPingType() {
+        // Returns a value to the caller
         return type;
+    // End of a block/expression
     }
 
+    // Annotation for the following element
     @Override
+    // Start of a method/block
     public boolean isCancelled() {
+        // Returns a value to the caller
         return cancelled;
+    // End of a block/expression
     }
 
     /**
@@ -90,8 +127,13 @@ public class ServerListPingEvent implements CancellableEvent, AsyncEvent {
      *
      * @param cancel true if the event should be cancelled, false otherwise
      */
+    // Annotation for the following element
     @Override
+    // Start of a method/block
     public void setCancelled(boolean cancel) {
+        // Access to the current/parent object
         this.cancelled = cancel;
+    // End of a block/expression
     }
+// End of a block/expression
 }

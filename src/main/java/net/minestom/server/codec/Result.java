@@ -1,9 +1,14 @@
+// Package declaration for this file
 package net.minestom.server.codec;
 
+// Import of a required class
 import org.jetbrains.annotations.Contract;
+// Import of a required class
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import of a required class
 import java.util.Objects;
+// Import of a required class
 import java.util.function.Function;
 
 /**
@@ -18,6 +23,7 @@ import java.util.function.Function;
  *
  * @param <T> the type, can be nullable.
  */
+// Type declaration (class/interface/enum/record)
 public sealed interface Result<T extends @UnknownNullability Object> {
 
     /**
@@ -26,7 +32,9 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param value the value of {@link T}
      * @param <T>   the value type
      */
+    // Type declaration (class/interface/enum/record)
     record Ok<T extends @UnknownNullability Object>(T value) implements Result<T> {
+    // End of a block/expression
     }
 
     /**
@@ -35,10 +43,15 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param message the message
      * @param <T>     the type
      */
+    // Type declaration (class/interface/enum/record)
     record Error<T>(String message) implements Result<T> {
+        // Start of a method/block
         public Error {
+            // Calls a method
             Objects.requireNonNull(message, "Message cannot be null");
+        // End of a block/expression
         }
+    // End of a block/expression
     }
 
     /**
@@ -49,9 +62,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param <S>    the type of the result.
      * @return the new result or the error.
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default <S extends @UnknownNullability Object> Result<S> map(Function<T, Result<S>> mapper) {
+        // Returns a value to the caller
         return this instanceof Ok<T>(T value) ? mapper.apply(value) : cast();
+    // End of a block/expression
     }
 
     /**
@@ -64,9 +81,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param <S>    the type of the result.
      * @return the new result or the error.
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default <S extends @UnknownNullability Object> Result<S> mapResult(Function<T, S> mapper) {
+        // Returns a value to the caller
         return this instanceof Ok<T>(T value) ? new Ok<>(mapper.apply(value)) : cast();
+    // End of a block/expression
     }
 
     /**
@@ -78,9 +99,13 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param mapper the new result
      * @return the new result or the error.
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default Result<T> mapError(Function<String, String> mapper) {
+        // Returns a value to the caller
         return this instanceof Error<?>(String message) ? new Error<>(mapper.apply(message)) : this;
+    // End of a block/expression
     }
 
     /**
@@ -89,10 +114,15 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @param other value to be returned
      * @return the resultant
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default @UnknownNullability T orElse(@UnknownNullability T other) {
+        // Returns a value to the caller
         return this instanceof Ok<T>(T value)
+                // Code statement
                 ? value : other;
+    // End of a block/expression
     }
 
     /**
@@ -101,12 +131,19 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the value
      * @throws IllegalStateException if this instance of {@link Error}
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default T orElseThrow() {
+        // Returns a value to the caller
         return switch (this) {
+            // Multiple branching (switch/case)
             case Ok<T>(T value) -> value;
+            // Multiple branching (switch/case)
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(errorMessage);
+        // End of a block/expression
         };
+    // End of a block/expression
     }
 
     /**
@@ -116,14 +153,23 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the value
      * @throws IllegalStateException if this instance of {@link Error}
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Start of a method/block
     default T orElseThrow(String message) {
+        // Returns a value to the caller
         return switch (this) {
+            // Multiple branching (switch/case)
             case Ok<T>(T value) -> value;
+            // Multiple branching (switch/case)
             case Error<?>(String errorMessage) -> throw new IllegalArgumentException(
+                    // Code statement
                     String.format("%s: %s", message, errorMessage)
+            // End of a block/expression
             );
+        // End of a block/expression
         };
+    // End of a block/expression
     }
 
     /**
@@ -135,12 +181,20 @@ public sealed interface Result<T extends @UnknownNullability Object> {
      * @return the error
      * @throws ClassCastException if the result is not {@link Error}
      */
+    // Annotation for the following element
     @Contract(pure = true)
+    // Annotation for the following element
     @SuppressWarnings("unchecked")
+    // Start of a method/block
     default <S> Result.Error<S> cast() {
+        // Branch: checks a condition
         if (!(this instanceof Result.Error<?>))
+            // Throws an exception
             throw new ClassCastException("Cannot cast a Result.Ok to a Result.Error");
+        // Returns a value to the caller
         return (Result.Error<S>) this;
+    // End of a block/expression
     }
 
+// End of a block/expression
 }

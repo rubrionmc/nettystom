@@ -1,15 +1,25 @@
+// Package declaration for this file
 package net.minestom.server.thread;
 
+// Import of a required class
 import net.minestom.server.entity.Entity;
+// Import of a required class
 import org.jetbrains.annotations.ApiStatus;
+// Import of a required class
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import of a required class
 import java.util.Optional;
+// Import of a required class
 import java.util.function.Consumer;
+// Import of a required class
 import java.util.function.Function;
+// Import of a required class
 import java.util.stream.Stream;
 
+// Annotation for the following element
 @ApiStatus.Experimental
+// Type declaration (class/interface/enum/record)
 public sealed interface Acquirable<T> permits AcquirableImpl {
 
     /**
@@ -21,20 +31,31 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the entities ticked in the current thread
      */
+    // Start of a method/block
     static Stream<Entity> localEntities() {
+        // Branch: checks a condition
         if (!(Thread.currentThread() instanceof TickThread tickThread)) return Stream.empty();
+        // Returns a value to the caller
         return tickThread.entries.stream()
+                // Code statement
                 .flatMap(partitionEntry -> partitionEntry.elements().stream())
+                // Code statement
                 .filter(tickable -> tickable instanceof Entity)
+                // Calls a method
                 .map(tickable -> (Entity) tickable);
+    // End of a block/expression
     }
 
     /**
      * Retrieve and reset acquiring time.
      */
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Start of a method/block
     static long resetAcquiringTime() {
+        // Returns a value to the caller
         return AcquirableImpl.WAIT_COUNTER_NANO.getAndSet(0);
+    // End of a block/expression
     }
 
     /**
@@ -47,9 +68,13 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @param <T>   the acquirable element type
      * @return a new acquirable object
      */
+    // Annotation for the following element
     @ApiStatus.Internal
+    // Start of a method/block
     static <T> Acquirable<T> unassigned(T value) {
+        // Returns a value to the caller
         return new AcquirableImpl<>(value);
+    // End of a block/expression
     }
 
     /**
@@ -63,6 +88,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @see #sync(Consumer) for auto-closeable capability
      * @see #applySync(Function) for auto-closeable capability
      */
+    // Calls a method
     Acquired<T> lock();
 
     /**
@@ -75,8 +101,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an optional containing the acquired element if safe
      * {@link Optional#empty()} otherwise
      */
+    // Start of a method/block
     default Optional<T> local() {
+        // Returns a value to the caller
         return isLocal() ? Optional.of(unwrap()) : Optional.empty();
+    // End of a block/expression
     }
 
     /**
@@ -84,6 +113,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return true if the element is linked to the current thread
      */
+    // Calls a method
     boolean isLocal();
 
     /**
@@ -98,8 +128,11 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @return an optional containing the acquired element if safe
      * {@link Optional#empty()} otherwise
      */
+    // Start of a method/block
     default Optional<T> owned() {
+        // Returns a value to the caller
         return isOwned() ? Optional.of(unwrap()) : Optional.empty();
+    // End of a block/expression
     }
 
     /**
@@ -108,6 +141,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return true if the element is linked to the current thread
      */
+    // Calls a method
     boolean isOwned();
 
     /**
@@ -117,6 +151,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @param consumer the callback to execute once the element has been safely acquired
      */
+    // Calls a method
     void sync(Consumer<T> consumer);
 
     /**
@@ -127,6 +162,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * @param consumer the callback to execute once the element has been safely acquired
      * @return true if the consumer was executed, false otherwise
      */
+    // Calls a method
     boolean trySync(Consumer<T> consumer);
 
     /**
@@ -136,13 +172,21 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @param function the function to execute once the element has been safely acquired
      */
+    // Start of a method/block
     default <R> R applySync(Function<T, R> function) {
+        // Calls a method
         Acquired<T> acquired = lock();
+        // Exception handling
         try {
+            // Returns a value to the caller
             return function.apply(acquired.get());
+        // Start of a method/block
         } finally {
+            // Calls a method
             acquired.unlock();
+        // End of a block/expression
         }
+    // End of a block/expression
     }
 
 
@@ -153,6 +197,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the unwrapped value
      */
+    // Calls a method
     T unwrap();
 
     /**
@@ -162,7 +207,9 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @return the assigned thread, null if not initialized (likely on the next tick)
      */
+    // Annotation for the following element
     @UnknownNullability
+    // Calls a method
     TickThread assignedThread();
 
     /**
@@ -175,5 +222,7 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      *
      * @throws AcquirableOwnershipException if the current thread does not own the acquirable element
      */
+    // Calls a method
     void assertOwnership();
+// End of a block/expression
 }
