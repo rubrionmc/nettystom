@@ -1,6 +1,9 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.entity.ai;
 
+// Import d'une classe nécessaire
 import java.util.Collection;
+// Import d'une classe nécessaire
 import java.util.List;
 
 /**
@@ -11,6 +14,7 @@ import java.util.List;
  * For every group there could be only a single {@link GoalSelector goal selector} running at a time,
  * but multiple groups are independent of each other, so each of them can have own goal selector running.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface EntityAI {
 
     /**
@@ -18,6 +22,7 @@ public interface EntityAI {
      *
      * @return a modifiable collection of AI groups of this entity.
      */
+    // Appelle une méthode
     Collection<EntityAIGroup> getAIGroups();
 
     /**
@@ -25,8 +30,11 @@ public interface EntityAI {
      *
      * @param group a group to be added.
      */
+    // Début d'une méthode/d'un bloc
     default void addAIGroup(EntityAIGroup group) {
+        // Appelle une méthode
         getAIGroups().add(group);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -37,15 +45,25 @@ public interface EntityAI {
      * @param goalSelectors   goal selectors of the group.
      * @param targetSelectors target selectors of the group.
      */
+    // Début d'une méthode/d'un bloc
     default void addAIGroup(List<GoalSelector> goalSelectors, List<TargetSelector> targetSelectors) {
+        // Appelle une méthode
         EntityAIGroup group = new EntityAIGroup();
+        // Appelle une méthode
         group.getGoalSelectors().addAll(goalSelectors);
+        // Appelle une méthode
         group.getTargetSelectors().addAll(targetSelectors);
+        // Appelle une méthode
         addAIGroup(group);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void aiTick(long time) {
+        // Appelle une méthode
         getAIGroups().forEach(group -> group.tick(time));
+    // Fin d'un bloc/d'une expression
     }
 
+// Fin d'un bloc/d'une expression
 }

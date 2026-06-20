@@ -32,7 +32,10 @@
  * MyType decoded = MyType.CODEC.decode(Transcoder.JSON, encoded).orElseThrow();
  * }</pre>
  */
+// Annotation pour l'élément suivant
 @NotNullByDefault
+// Déclaration du paquet de ce fichier
 package net.minestom.server.codec;
 
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.NotNullByDefault;

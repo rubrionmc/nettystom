@@ -1,12 +1,20 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.event.player;
 
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
+// Import d'une classe nécessaire
 import net.minestom.server.event.trait.PlayerEvent;
+// Import d'une classe nécessaire
 import net.minestom.server.network.debug.DebugSubscription;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.ApiStatus;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Unmodifiable;
 
+// Import d'une classe nécessaire
 import java.util.Objects;
+// Import d'une classe nécessaire
 import java.util.Set;
 
 /**
@@ -21,8 +29,11 @@ import java.util.Set;
  * By default, no response ({@link net.minestom.server.network.packet.server.play.DebugEventPacket}) is sent by the server
  * and no response is required if you choose to ignore.
  */
+// Déclaration de type (classe/interface/enum/record)
 public class PlayerDebugSubscriptionsRequestEvent implements PlayerEvent {
+    // Instruction de code
     private final Player player;
+    // Instruction de code
     private final Set<DebugSubscription<?>> subscriptions;
 
     /**
@@ -31,10 +42,15 @@ public class PlayerDebugSubscriptionsRequestEvent implements PlayerEvent {
      * @param player player
      * @param subscriptions subscriptions
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Experimental
+    // Début d'une méthode/d'un bloc
     public PlayerDebugSubscriptionsRequestEvent(Player player, Set<DebugSubscription<?>> subscriptions) {
+        // Accès à l'objet courant/parent
         this.player = Objects.requireNonNull(player, "player");
+        // Accès à l'objet courant/parent
         this.subscriptions = Objects.requireNonNull(subscriptions, "subscriptions");
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -45,8 +61,11 @@ public class PlayerDebugSubscriptionsRequestEvent implements PlayerEvent {
      *
      * @return the subscriptions
      */
+    // Début d'une méthode/d'un bloc
     public @Unmodifiable Set<DebugSubscription<?>> getSubscriptions() {
+        // Renvoie une valeur à l'appelant
         return subscriptions;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -54,12 +73,20 @@ public class PlayerDebugSubscriptionsRequestEvent implements PlayerEvent {
      *
      * @return true if {@link #getSubscriptions()} is not empty.
      */
+    // Début d'une méthode/d'un bloc
     public boolean wantsSubscriptions() {
+        // Renvoie une valeur à l'appelant
         return !subscriptions.isEmpty();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public Player getPlayer() {
+        // Renvoie une valeur à l'appelant
         return player;
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

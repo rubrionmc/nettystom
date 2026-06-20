@@ -1,3 +1,4 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.event;
 
 /**
@@ -8,6 +9,7 @@ package net.minestom.server.event;
  *
  * @param <E> the event type
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Handle {
     /**
      * Calls the given event.
@@ -17,6 +19,7 @@ public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Ha
      *
      * @param event the event to call
      */
+    // Appelle une méthode
     void call(E event);
 
     /**
@@ -29,5 +32,7 @@ public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Ha
      *
      * @return true if the event has 1 or more listeners
      */
+    // Appelle une méthode
     boolean hasListener();
+// Fin d'un bloc/d'une expression
 }

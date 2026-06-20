@@ -1,10 +1,16 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.adventure.audience;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.audience.Audience;
+// Import d'une classe nécessaire
 import net.kyori.adventure.key.Key;
+// Import d'une classe nécessaire
 import net.kyori.adventure.key.Keyed;
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
 
+// Import d'une classe nécessaire
 import java.util.function.Predicate;
 
 /**
@@ -12,6 +18,7 @@ import java.util.function.Predicate;
  *
  * @param <A> the type that is provided
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface AudienceProvider<A> {
 
     /**
@@ -21,6 +28,7 @@ public interface AudienceProvider<A> {
      *
      * @return all audience members
      */
+    // Appelle une méthode
     A all();
 
     /**
@@ -28,6 +36,7 @@ public interface AudienceProvider<A> {
      *
      * @return all players
      */
+    // Appelle une méthode
     A players();
 
     /**
@@ -36,6 +45,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all players matching the predicate
      */
+    // Appelle une méthode
     A players(Predicate<Player> filter);
 
     /**
@@ -43,6 +53,7 @@ public interface AudienceProvider<A> {
      *
      * @return the console
      */
+    // Appelle une méthode
     A console();
 
     /**
@@ -50,6 +61,7 @@ public interface AudienceProvider<A> {
      *
      * @return the audience of all players and the console
      */
+    // Appelle une méthode
     A server();
 
     /**
@@ -58,8 +70,11 @@ public interface AudienceProvider<A> {
      * @param keyed the keyed object
      * @return all custom audience members stored using the key of the object
      */
+    // Début d'une méthode/d'un bloc
     default A custom(Keyed keyed) {
+        // Renvoie une valeur à l'appelant
         return this.custom(keyed.key());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -68,6 +83,7 @@ public interface AudienceProvider<A> {
      * @param key the key
      * @return all custom audience members stored using the key
      */
+    // Appelle une méthode
     A custom(Key key);
 
     /**
@@ -78,8 +94,11 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
+    // Début d'une méthode/d'un bloc
     default A custom(Keyed keyed, Predicate<Audience> filter) {
+        // Renvoie une valeur à l'appelant
         return this.custom(keyed.key(), filter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -90,6 +109,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all custom audience members stored using the key
      */
+    // Appelle une méthode
     A custom(Key key, Predicate<Audience> filter);
 
     /**
@@ -97,6 +117,7 @@ public interface AudienceProvider<A> {
      *
      * @return all custom audience members
      */
+    // Appelle une méthode
     A customs();
 
     /**
@@ -105,6 +126,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching custom audience members
      */
+    // Appelle une méthode
     A customs(Predicate<Audience> filter);
 
     /**
@@ -113,6 +135,7 @@ public interface AudienceProvider<A> {
      * @param filter the predicate
      * @return all matching audience members
      */
+    // Appelle une méthode
     A all(Predicate<Audience> filter);
 
     /**
@@ -120,5 +143,7 @@ public interface AudienceProvider<A> {
      *
      * @return the registry
      */
+    // Appelle une méthode
     AudienceRegistry registry();
+// Fin d'un bloc/d'une expression
 }

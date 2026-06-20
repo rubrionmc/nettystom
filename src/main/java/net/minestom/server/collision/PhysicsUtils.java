@@ -1,11 +1,18 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.collision;
 
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Pos;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Vec;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.WorldBorder;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
 
+// Déclaration de type (classe/interface/enum/record)
 public final class PhysicsUtils {
     /**
      * Simulate the entity's movement physics
@@ -27,23 +34,37 @@ public final class PhysicsUtils {
      * @param previousPhysicsResult the physics result from the previous simulation or null
      * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
      */
+    // Instruction de code
     public static PhysicsResult simulateMovement(Pos entityPosition, Vec entityVelocityPerTick, BoundingBox entityBoundingBox,
+                                                          // Instruction de code
                                                           WorldBorder worldBorder, Block.Getter blockGetter, Aerodynamics aerodynamics, boolean entityNoGravity,
+                                                          // Début d'une méthode/d'un bloc
                                                           boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
+        // Affecte une valeur
         final PhysicsResult physicsResult = entityHasPhysics ?
+                // Instruction de code
                 CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
+                // Appelle une méthode
                 CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
 
+        // Appelle une méthode
         Pos newPosition = physicsResult.newPosition();
+        // Appelle une méthode
         Vec newVelocity = physicsResult.newVelocity();
 
+        // Appelle une méthode
         Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
+        // Appelle une méthode
         newVelocity = updateVelocity(positionWithinBorder, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
 
+        // Appelle une méthode
         final boolean stillCached = physicsResult.cached() && newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition());
 
+        // Renvoie une valeur à l'appelant
         return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
+                // Appelle une méthode
                 physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res(), stillCached);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -62,23 +83,40 @@ public final class PhysicsUtils {
      * @param entityNoGravity whether the entity has gravity
      * @return the updated velocity or {@link Vec#ZERO} if the entity is flying
      */
+    // Instruction de code
     public static Vec updateVelocity(Pos entityPosition, Vec currentVelocity, Block.Getter blockGetter, Aerodynamics aerodynamics,
+                                               // Début d'une méthode/d'un bloc
                                                boolean positionChanged, boolean entityFlying, boolean entityOnGround, boolean entityNoGravity) {
+        // Embranchement : vérifie une condition
         if (!positionChanged) {
+            // Embranchement : vérifie une condition
             if (entityFlying) return Vec.ZERO;
+            // Renvoie une valeur à l'appelant
             return new Vec(0, entityNoGravity ? 0 : -aerodynamics.gravity() * aerodynamics.verticalAirResistance(), 0);
+        // Fin d'un bloc/d'une expression
         }
 
+        // Boucle : répète un bloc
         double drag = entityOnGround ? blockGetter.getBlock(entityPosition.sub(0, 0.5000001, 0)).registry().friction() * aerodynamics.horizontalAirResistance() :
+                // Appelle une méthode
                 aerodynamics.horizontalAirResistance();
+        // Boucle : répète un bloc
         double gravity = entityFlying ? 0 : aerodynamics.gravity();
+        // Boucle : répète un bloc
         double gravityDrag = entityFlying ? 0.6 : aerodynamics.verticalAirResistance();
 
+        // Boucle : répète un bloc
         double x = currentVelocity.x() * drag;
+        // Boucle : répète un bloc
         double y = entityNoGravity ? currentVelocity.y() : (currentVelocity.y() - gravity) * gravityDrag;
+        // Boucle : répète un bloc
         double z = currentVelocity.z() * drag;
+        // Renvoie une valeur à l'appelant
         return new Vec(Math.abs(x) < Vec.EPSILON ? 0 : x, Math.abs(y) < Vec.EPSILON ? 0 : y, Math.abs(z) < Vec.EPSILON ? 0 : z);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Instruction de code
     private PhysicsUtils() {}
+// Fin d'un bloc/d'une expression
 }

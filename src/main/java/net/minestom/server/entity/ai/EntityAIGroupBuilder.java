@@ -1,7 +1,10 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.entity.ai;
 
+// Déclaration de type (classe/interface/enum/record)
 public class EntityAIGroupBuilder {
 
+    // Appelle une méthode
     private final EntityAIGroup group = new EntityAIGroup();
 
     /**
@@ -11,9 +14,13 @@ public class EntityAIGroupBuilder {
      * @param goalSelector goal selector to be added.
      * @return this builder.
      */
+    // Début d'une méthode/d'un bloc
     public EntityAIGroupBuilder addGoalSelector(GoalSelector goalSelector) {
+        // Accès à l'objet courant/parent
         this.group.getGoalSelectors().add(goalSelector);
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -23,9 +30,13 @@ public class EntityAIGroupBuilder {
      * @param targetSelector target selector to be added.
      * @return this builder.
      */
+    // Début d'une méthode/d'un bloc
     public EntityAIGroupBuilder addTargetSelector(TargetSelector targetSelector) {
+        // Accès à l'objet courant/parent
         this.group.getTargetSelectors().add(targetSelector);
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -33,8 +44,12 @@ public class EntityAIGroupBuilder {
      *
      * @return new {@link EntityAIGroup}.
      */
+    // Début d'une méthode/d'un bloc
     public EntityAIGroup build() {
+        // Renvoie une valeur à l'appelant
         return this.group;
+    // Fin d'un bloc/d'une expression
     }
 
+// Fin d'un bloc/d'une expression
 }

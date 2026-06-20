@@ -1,19 +1,29 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance.batch;
 
+// Import d'une classe nécessaire
 import net.minestom.server.instance.Instance;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
 
 /**
  * Represents options for {@link Batch}s.
  */
+// Déclaration de type (classe/interface/enum/record)
 public class BatchOption {
 
+    // Affecte une valeur
     private boolean fullChunk = false;
+    // Affecte une valeur
     private boolean calculateInverse = false;
+    // Affecte une valeur
     private boolean unsafeApply = false;
+    // Affecte une valeur
     private boolean sendUpdate = true;
 
+    // Début d'une méthode/d'un bloc
     public BatchOption() {
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -25,8 +35,11 @@ public class BatchOption {
      *
      * @return true if the batch is responsible for all the chunk
      */
+    // Début d'une méthode/d'un bloc
     public boolean isFullChunk() {
+        // Renvoie une valeur à l'appelant
         return fullChunk;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -40,8 +53,11 @@ public class BatchOption {
      * @return true if the batch will calculate its inverse on application
      * @see #isUnsafeApply()
      */
+    // Début d'une méthode/d'un bloc
     public boolean shouldCalculateInverse() {
+        // Renvoie une valeur à l'appelant
         return calculateInverse;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -58,12 +74,18 @@ public class BatchOption {
      *
      * @return true if the batch will immediately
      */
+    // Début d'une méthode/d'un bloc
     public boolean isUnsafeApply() {
+        // Renvoie une valeur à l'appelant
         return this.unsafeApply;
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     public boolean shouldSendUpdate() {
+        // Renvoie une valeur à l'appelant
         return sendUpdate;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -71,10 +93,15 @@ public class BatchOption {
      * @return 'this' for chaining
      * @see #isFullChunk()
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> this")
+    // Début d'une méthode/d'un bloc
     public BatchOption setFullChunk(boolean fullChunk) {
+        // Accès à l'objet courant/parent
         this.fullChunk = fullChunk;
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -82,10 +109,15 @@ public class BatchOption {
      * @return 'this' for chaining
      * @see #shouldCalculateInverse()
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> this")
+    // Début d'une méthode/d'un bloc
     public BatchOption setCalculateInverse(boolean calculateInverse) {
+        // Accès à l'objet courant/parent
         this.calculateInverse = calculateInverse;
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -94,15 +126,26 @@ public class BatchOption {
      * @see #isUnsafeApply()
      * @see Batch#isReady()
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> this")
+    // Début d'une méthode/d'un bloc
     public BatchOption setUnsafeApply(boolean unsafeApply) {
+        // Accès à l'objet courant/parent
         this.unsafeApply = unsafeApply;
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Contract("_ -> this")
+    // Début d'une méthode/d'un bloc
     public BatchOption setSendUpdate(boolean sendUpdate) {
+        // Accès à l'objet courant/parent
         this.sendUpdate = sendUpdate;
+        // Renvoie une valeur à l'appelant
         return this;
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }
