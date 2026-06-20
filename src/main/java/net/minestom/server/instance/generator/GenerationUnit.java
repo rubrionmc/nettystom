@@ -1,11 +1,18 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.instance.generator;
 
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Point;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Vec;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
 
+// Import d'une classe nécessaire
 import java.util.List;
+// Import d'une classe nécessaire
 import java.util.Set;
+// Import d'une classe nécessaire
 import java.util.function.Consumer;
 
 /**
@@ -13,12 +20,14 @@ import java.util.function.Consumer;
  * <p>
  * The size is guaranteed to be a multiple of 16 (section).
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface GenerationUnit {
     /**
      * This unit's modifier, used to place blocks and biomes within this unit.
      *
      * @return the modifier
      */
+    // Appelle une méthode
     UnitModifier modifier();
 
     /**
@@ -28,6 +37,7 @@ public interface GenerationUnit {
      *
      * @return the size of this unit
      */
+    // Appelle une méthode
     Point size();
 
     /**
@@ -35,6 +45,7 @@ public interface GenerationUnit {
      *
      * @return the absolute start
      */
+    // Appelle une méthode
     Point absoluteStart();
 
     /**
@@ -42,6 +53,7 @@ public interface GenerationUnit {
      *
      * @return the absolute end
      */
+    // Appelle une méthode
     Point absoluteEnd();
 
     /**
@@ -51,6 +63,7 @@ public interface GenerationUnit {
      * @param end   the end of the fork
      * @return the fork
      */
+    // Appelle une méthode
     GenerationUnit fork(Point start, Point end);
 
     /**
@@ -58,6 +71,7 @@ public interface GenerationUnit {
      *
      * @param consumer the consumer
      */
+    // Appelle une méthode
     void fork(Consumer<Block.Setter> consumer);
 
     /**
@@ -65,8 +79,11 @@ public interface GenerationUnit {
      *
      * @return an immutable list of independent units
      */
+    // Début d'une méthode/d'un bloc
     default List<GenerationUnit> subdivide() {
+        // Renvoie une valeur à l'appelant
         return List.of(this);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -74,20 +91,37 @@ public interface GenerationUnit {
      *
      * @return the contained sections
      */
+    // Début d'une méthode/d'un bloc
     default Set<Vec> sections() {
+        // Appelle une méthode
         final Point start = absoluteStart(), end = absoluteEnd();
+        // Appelle une méthode
         final int minX = start.sectionX(), minY = start.sectionY(), minZ = start.sectionZ();
+        // Appelle une méthode
         final int maxX = end.sectionX(), maxY = end.sectionY(), maxZ = end.sectionZ();
+        // Appelle une méthode
         final int count = (maxX - minX) * (maxY - minY) * (maxZ - minZ);
+        // Affecte une valeur
         Vec[] sections = new Vec[count];
+        // Affecte une valeur
         int index = 0;
+        // Boucle : répète un bloc
         for (int sectionX = minX; sectionX < maxX; sectionX++) {
+            // Boucle : répète un bloc
             for (int sectionY = minY; sectionY < maxY; sectionY++) {
+                // Boucle : répète un bloc
                 for (int sectionZ = minZ; sectionZ < maxZ; sectionZ++) {
+                    // Appelle une méthode
                     sections[index++] = new Vec(sectionX, sectionY, sectionZ);
+                // Fin d'un bloc/d'une expression
                 }
+            // Fin d'un bloc/d'une expression
             }
+        // Fin d'un bloc/d'une expression
         }
+        // Renvoie une valeur à l'appelant
         return Set.of(sections);
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

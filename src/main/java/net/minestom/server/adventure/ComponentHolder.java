@@ -1,9 +1,14 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.adventure;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.text.Component;
 
+// Import d'une classe nécessaire
 import java.util.Collection;
+// Import d'une classe nécessaire
 import java.util.function.Consumer;
+// Import d'une classe nécessaire
 import java.util.function.UnaryOperator;
 
 /**
@@ -11,6 +16,7 @@ import java.util.function.UnaryOperator;
  *
  * @param <T> the holding class
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface ComponentHolder<T> {
 
     /**
@@ -18,6 +24,7 @@ public interface ComponentHolder<T> {
      *
      * @return the components
      */
+    // Appelle une méthode
     Collection<? extends Component> components();
 
     /**
@@ -27,6 +34,7 @@ public interface ComponentHolder<T> {
      * @param operator the operator
      * @return the copy
      */
+    // Appelle une méthode
     T copyWithOperator(UnaryOperator<Component> operator);
 
     /**
@@ -34,9 +42,15 @@ public interface ComponentHolder<T> {
      *
      * @param visitor the visitor
      */
+    // Début d'une méthode/d'un bloc
     default void visitComponents(Consumer<? super Component> visitor) {
+        // Boucle : répète un bloc
         for (Component component : this.components()) {
+            // Appelle une méthode
             visitor.accept(component);
+        // Fin d'un bloc/d'une expression
         }
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

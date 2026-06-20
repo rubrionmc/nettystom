@@ -1,16 +1,27 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.entity.pathfinding.generators;
 
+// Import d'une classe nécessaire
 import net.minestom.server.collision.BoundingBox;
+// Import d'une classe nécessaire
 import net.minestom.server.collision.CollisionUtils;
+// Import d'une classe nécessaire
 import net.minestom.server.collision.PhysicsResult;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Point;
+// Import d'une classe nécessaire
 import net.minestom.server.entity.pathfinding.PNode;
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.Block;
 
+// Import d'une classe nécessaire
 import java.util.Collection;
+// Import d'une classe nécessaire
 import java.util.OptionalDouble;
+// Import d'une classe nécessaire
 import java.util.Set;
 
+// Déclaration de type (classe/interface/enum/record)
 public interface NodeGenerator {
     /**
      * Gets the walkable nodes.
@@ -22,12 +33,15 @@ public interface NodeGenerator {
      * @param boundingBox the bounding box
      * @return the walkable nodes
      */
+    // Instruction de code
     Collection<? extends PNode> getWalkable(Block.Getter getter, Set<PNode> visited,
+                                                     // Instruction de code
                                                      PNode current, Point goal, BoundingBox boundingBox);
 
     /**
      * @return snap start and end points to the ground
      */
+    // Appelle une méthode
     boolean hasGravitySnap();
 
     /**
@@ -41,7 +55,9 @@ public interface NodeGenerator {
      * @param maxFall     the maximum fall distance
      * @return the snapped y coordinate. Empty if the snap point is not found
      */
+    // Instruction de code
     OptionalDouble gravitySnap(Block.Getter getter, double pointX, double pointY, double pointZ,
+                                        // Instruction de code
                                         BoundingBox boundingBox, double maxFall);
 
     /**
@@ -53,13 +69,20 @@ public interface NodeGenerator {
      * @param boundingBox
      * @return true if we can move directly from start to end
      */
+    // Début d'une méthode/d'un bloc
     default boolean canMoveTowards(Block.Getter getter, Point start, Point end, BoundingBox boundingBox) {
+        // Appelle une méthode
         final Point diff = end.sub(start);
 
+        // Embranchement : vérifie une condition
         if (getter.getBlock(end) != Block.AIR) return false;
+        // Affecte une valeur
         PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
+                // Appelle une méthode
                 start.asPos(), diff.asVec(), null, false);
+        // Renvoie une valeur à l'appelant
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -70,16 +93,26 @@ public interface NodeGenerator {
      * @param boundingBox
      * @return true if the point is invalid
      */
+    // Début d'une méthode/d'un bloc
     default boolean pointInvalid(Block.Getter getter, Point point, BoundingBox boundingBox) {
+        // Appelle une méthode
         var iterator = boundingBox.getBlocks(point);
+        // Boucle : répète un bloc
         while (iterator.hasNext()) {
+            // Appelle une méthode
             var block = iterator.next();
+            // Embranchement : vérifie une condition
             if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+                // Renvoie une valeur à l'appelant
                 return true;
+            // Fin d'un bloc/d'une expression
             }
+        // Fin d'un bloc/d'une expression
         }
 
+        // Renvoie une valeur à l'appelant
         return false;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -89,7 +122,11 @@ public interface NodeGenerator {
      * @param target
      * @return the heuristic
      */
+    // Début d'une méthode/d'un bloc
     default double heuristic(Point node, Point target) {
+        // Renvoie une valeur à l'appelant
         return node.distance(target);
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

@@ -1,7 +1,11 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.network;
 
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
+// Import d'une classe nécessaire
 import net.minestom.server.network.player.GameProfile;
+// Import d'une classe nécessaire
 import net.minestom.server.network.player.PlayerConnection;
 
 /**
@@ -9,7 +13,9 @@ import net.minestom.server.network.player.PlayerConnection;
  * <p>
  * Sets with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
+// Annotation pour l'élément suivant
 @FunctionalInterface
+// Déclaration de type (classe/interface/enum/record)
 public interface PlayerProvider {
 
     /**
@@ -21,5 +27,7 @@ public interface PlayerProvider {
      * @param gameProfile the player game profile
      * @return a newly create {@link Player} object
      */
+    // Appelle une méthode
     Player createPlayer(PlayerConnection connection, GameProfile gameProfile);
+// Fin d'un bloc/d'une expression
 }

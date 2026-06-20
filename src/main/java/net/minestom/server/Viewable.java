@@ -1,20 +1,32 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.audience.Audience;
+// Import d'une classe nécessaire
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
+// Import d'une classe nécessaire
 import net.minestom.server.network.packet.server.SendablePacket;
+// Import d'une classe nécessaire
 import net.minestom.server.network.packet.server.ServerPacket;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.PacketSendingUtils;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Unmodifiable;
 
+// Import d'une classe nécessaire
 import java.util.Collection;
+// Import d'une classe nécessaire
 import java.util.List;
+// Import d'une classe nécessaire
 import java.util.Set;
 
 /**
  * Represents something which can be displayed or hidden to players.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface Viewable {
 
     /**
@@ -23,6 +35,7 @@ public interface Viewable {
      * @param player the viewer to add
      * @return true if the player has been added, false otherwise (could be because he is already a viewer)
      */
+    // Appelle une méthode
     boolean addViewer(Player player);
 
     /**
@@ -31,6 +44,7 @@ public interface Viewable {
      * @param player the viewer to remove
      * @return true if the player has been removed, false otherwise (could be because he was not a viewer)
      */
+    // Appelle une méthode
     boolean removeViewer(Player player);
 
     /**
@@ -38,7 +52,9 @@ public interface Viewable {
      *
      * @return A Set containing all the element's viewers
      */
+    // Annotation pour l'élément suivant
     @Unmodifiable
+    // Appelle une méthode
     Set<? extends Player> getViewers();
 
     /**
@@ -47,8 +63,11 @@ public interface Viewable {
      * @param player the player to check
      * @return true if {@code player} is a viewer, false otherwise
      */
+    // Début d'une méthode/d'un bloc
     default boolean isViewer(Player player) {
+        // Renvoie une valeur à l'appelant
         return getViewers().contains(player);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -59,20 +78,33 @@ public interface Viewable {
      *
      * @param packet the packet to send to all viewers
      */
+    // Début d'une méthode/d'un bloc
     default void sendPacketToViewers(SendablePacket packet) {
+        // Embranchement : vérifie une condition
         if (packet instanceof ServerPacket serverPacket) {
+            // Appelle une méthode
             PacketSendingUtils.sendGroupedPacket(getViewers(), serverPacket);
+        // Branche alternative de la condition
         } else {
+            // Appelle une méthode
             getViewers().forEach(player -> player.sendPacket(packet));
+        // Fin d'un bloc/d'une expression
         }
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void sendPacketsToViewers(Collection<? extends SendablePacket> packets) {
+        // Appelle une méthode
         packets.forEach(this::sendPacketToViewers);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default void sendPacketsToViewers(SendablePacket... packets) {
+        // Appelle une méthode
         sendPacketsToViewers(List.of(packets));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -82,8 +114,11 @@ public interface Viewable {
      *
      * @param packet the packet to send
      */
+    // Début d'une méthode/d'un bloc
     default void sendPacketToViewersAndSelf(SendablePacket packet) {
+        // Appelle une méthode
         sendPacketToViewers(packet);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -91,8 +126,11 @@ public interface Viewable {
      *
      * @return the audience
      */
+    // Début d'une méthode/d'un bloc
     default Audience getViewersAsAudience() {
+        // Renvoie une valeur à l'appelant
         return PacketGroupingAudience.of(this.getViewers());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -101,7 +139,11 @@ public interface Viewable {
      *
      * @return the audiences
      */
+    // Début d'une méthode/d'un bloc
     default Iterable<? extends Audience> getViewersAsAudiences() {
+        // Renvoie une valeur à l'appelant
         return this.getViewers();
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

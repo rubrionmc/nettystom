@@ -1,17 +1,30 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.registry;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.key.Key;
+// Import d'une classe nécessaire
 import net.minestom.server.codec.Codec;
+// Import d'une classe nécessaire
 import net.minestom.server.dialog.Dialog;
+// Import d'une classe nécessaire
 import net.minestom.server.entity.Player;
+// Import d'une classe nécessaire
 import net.minestom.server.gamedata.DataPack;
+// Import d'une classe nécessaire
 import net.minestom.server.item.enchant.Enchantment;
+// Import d'une classe nécessaire
 import net.minestom.server.network.packet.server.SendablePacket;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.ApiStatus;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
 
+// Import d'une classe nécessaire
 import java.util.Comparator;
+// Import d'une classe nécessaire
 import java.util.Map;
+// Import d'une classe nécessaire
 import java.util.Objects;
 
 /**
@@ -25,19 +38,31 @@ import java.util.Objects;
  * @param <T> The type of the registry entries
  * @see Registries
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
+    // Annotation pour l'élément suivant
     @SafeVarargs
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> fromMap(Key key, Map.Entry<Key, T>... entries) {
+        // Appelle une méthode
         var registry = new DynamicRegistryImpl<T>(key, null);
+        // Boucle : répète un bloc
         for (var entry : entries)
+            // Appelle une méthode
             registry.register(entry.getKey(), entry.getValue(), DataPack.MINESTOM_UNNAMED);
+        // Renvoie une valeur à l'appelant
         return registry.compact();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> create(Key key) {
+        // Renvoie une valeur à l'appelant
         return new DynamicRegistryImpl<>(key, null);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -45,9 +70,13 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      *
      * @see Registries
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> create(Key key, Codec<T> codec) {
+        // Renvoie une valeur à l'appelant
         return new DynamicRegistryImpl<>(key, codec);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -55,9 +84,13 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      *
      * @see Registries
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, RegistryData.Resource resource) {
+        // Renvoie une valeur à l'appelant
         return create(key, codec, null, resource, null, null);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -65,9 +98,13 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      *
      * @see Registries
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource) {
+        // Renvoie une valeur à l'appelant
         return create(key, codec, registries, resource, null, null);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -75,51 +112,93 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      *
      * @see Registries
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     static <T> DynamicRegistry<T> create(Key key, Codec<T> codec, @Nullable Registries registries, RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+        // Appelle une méthode
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
+        // Appelle une méthode
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
+        // Renvoie une valeur à l'appelant
         return registry.compact();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Instruction de code
     static DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
+            // Instruction de code
             Key key, Codec<Enchantment> codec,
+            // Instruction de code
             RegistryData.Resource resource, Registries registries
+    // Début d'une méthode/d'un bloc
     ) {
+        // Appelle une méthode
         final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
+        // Début d'une méthode/d'un bloc
         DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating() {
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public Registries registries() {
+                // Renvoie une valeur à l'appelant
                 return registries;
+            // Fin d'un bloc/d'une expression
             }
 
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public DynamicRegistry<Enchantment> enchantment() {
+                // Renvoie une valeur à l'appelant
                 return registry;
+            // Fin d'un bloc/d'une expression
             }
+        // Instruction de code
         }, registry, resource, null, codec);
+        // Renvoie une valeur à l'appelant
         return registry.compact();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Instruction de code
     static DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
+            // Instruction de code
             Key key, Codec<Dialog> codec,
+            // Instruction de code
             RegistryData.Resource resource, Registries registries
+    // Début d'une méthode/d'un bloc
     ) {
+        // Appelle une méthode
         final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
+        // Début d'une méthode/d'un bloc
         DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating() {
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public Registries registries() {
+                // Renvoie une valeur à l'appelant
                 return registries;
+            // Fin d'un bloc/d'une expression
             }
 
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public DynamicRegistry<Dialog> dialog() {
+                // Renvoie une valeur à l'appelant
                 return registry;
+            // Fin d'un bloc/d'une expression
             }
+        // Instruction de code
         }, registry, resource, null, codec);
+        // Renvoie une valeur à l'appelant
         return registry;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -135,20 +214,32 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @param object The entry to register
      * @return The new ID of the registered object
      */
+    // Début d'une méthode/d'un bloc
     default RegistryKey<T> register(String id, T object) {
+        // Renvoie une valeur à l'appelant
         return register(Key.key(id), object, DataPack.MINESTOM_UNNAMED);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Début d'une méthode/d'un bloc
     default RegistryKey<T> register(Key id, T object) {
+        // Renvoie une valeur à l'appelant
         return register(id, object, DataPack.MINESTOM_UNNAMED);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Début d'une méthode/d'un bloc
     default RegistryKey<T> register(String id, T object, DataPack pack) {
+        // Renvoie une valeur à l'appelant
         return register(Key.key(id), object, pack);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Appelle une méthode
     RegistryKey<T> register(Key id, T object, DataPack pack);
 
     /**
@@ -167,6 +258,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
+    // Appelle une méthode
     boolean remove(Key key) throws UnsupportedOperationException;
 
     /**
@@ -177,7 +269,10 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */
+    // Annotation pour l'élément suivant
     @ApiStatus.Internal
+    // Appelle une méthode
     SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla);
 
+// Fin d'un bloc/d'une expression
 }

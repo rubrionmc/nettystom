@@ -1,65 +1,117 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.crypto;
 
+// Import d'une classe nécessaire
 import net.minestom.server.network.NetworkBuffer;
+// Import d'une classe nécessaire
 import net.minestom.server.network.NetworkBufferTemplate;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.validate.Check;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.UnknownNullability;
 
+// Import d'une classe nécessaire
 import java.util.Arrays;
 
+// Import statique d'un membre
 import static net.minestom.server.network.NetworkBuffer.FixedRawBytes;
+// Import statique d'un membre
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
+// Déclaration de type (classe/interface/enum/record)
 public record MessageSignature(byte[] signature) {
+    // Affecte une valeur
     static final int SIGNATURE_BYTE_LENGTH = 256;
 
+    // Début d'une méthode/d'un bloc
     public MessageSignature {
+        // Embranchement : vérifie une condition
         if (signature.length != SIGNATURE_BYTE_LENGTH) {
+            // Lève une exception
             throw new IllegalArgumentException("Signature must be 256 bytes long");
+        // Fin d'un bloc/d'une expression
         }
+        // Appelle une méthode
         signature = signature.clone();
+    // Fin d'un bloc/d'une expression
     }
 
+    // Affecte une valeur
     public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
+            // Instruction de code
             FixedRawBytes(SIGNATURE_BYTE_LENGTH), MessageSignature::signature,
+            // Instruction de code
             MessageSignature::new
+    // Fin d'un bloc/d'une expression
     );
 
+    // Déclaration de type (classe/interface/enum/record)
     public record Packed(int id, @UnknownNullability MessageSignature fullSignature) {
+        // Affecte une valeur
         private static final int FULL_SIGNATURE = -1;
 
+        // Début d'une méthode/d'un bloc
         public Packed(MessageSignature signature) {
+            // Appelle une méthode
             this(FULL_SIGNATURE, signature);
+        // Fin d'un bloc/d'une expression
         }
 
+        // Début d'une méthode/d'un bloc
         public Packed {
+            // Appelle une méthode
             Check.argCondition(id == FULL_SIGNATURE && fullSignature == null, "Full signature must be present");
+        // Fin d'un bloc/d'une expression
         }
 
+        // Affecte une valeur
         public static final NetworkBuffer.Type<Packed> SERIALIZER = new NetworkBuffer.Type<>() {
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public void write(NetworkBuffer buffer, Packed value) {
+                // Appelle une méthode
                 buffer.write(VAR_INT, value.id + 1);
+                // Embranchement : vérifie une condition
                 if (value.fullSignature != null) buffer.write(MessageSignature.SERIALIZER, value.fullSignature);
+            // Fin d'un bloc/d'une expression
             }
 
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public Packed read(NetworkBuffer buffer) {
+                // Appelle une méthode
                 final int id = buffer.read(VAR_INT) - 1;
+                // Renvoie une valeur à l'appelant
                 return id == FULL_SIGNATURE ? new MessageSignature.Packed(buffer.read(MessageSignature.SERIALIZER))
+                        // Appelle une méthode
                         : new MessageSignature.Packed(id, null);
+            // Fin d'un bloc/d'une expression
             }
+        // Fin d'un bloc/d'une expression
         };
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public boolean equals(Object o) {
+        // Embranchement : vérifie une condition
         if (!(o instanceof MessageSignature(byte[] signature1))) return false;
+        // Renvoie une valeur à l'appelant
         return Arrays.equals(signature(), signature1);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Annotation pour l'élément suivant
     @Override
+    // Début d'une méthode/d'un bloc
     public int hashCode() {
+        // Renvoie une valeur à l'appelant
         return Arrays.hashCode(signature());
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

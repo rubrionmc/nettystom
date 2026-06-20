@@ -1,12 +1,19 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.coordinate;
 
+// Import d'une classe nécessaire
 import net.minestom.server.instance.block.BlockFace;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.Direction;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.validate.Check;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
 
+// Import d'une classe nécessaire
 import java.util.function.DoubleUnaryOperator;
 
+// Import statique d'un membre
 import static net.minestom.server.coordinate.CoordConversion.*;
 
 /**
@@ -51,10 +58,12 @@ import static net.minestom.server.coordinate.CoordConversion.*;
  * <p>
  * All implementations are immutable and subject to become value types. Type conversions are also explicit to avoid precision loss.
  */
+// Déclaration de type (classe/interface/enum/record)
 public sealed interface Point permits Vec, Pos, BlockVec {
     /**
      * The smallest difference between two double values to consider them equal if applicable.
      */
+    // Affecte une valeur
     double EPSILON = 1e-6;
 
     /**
@@ -62,6 +71,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * <p>
      * Also known as chunk in X and Z axis.
      */
+    // Affecte une valeur
     int SECTION_SIZE = 16;
 
     /**
@@ -70,6 +80,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * <p>
      * Regions do not normally have a Y component.
      */
+    // Affecte une valeur
     int REGION_SIZE = 32 * SECTION_SIZE;
 
     /**
@@ -77,7 +88,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the X coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Appelle une méthode
     double x();
 
     /**
@@ -85,7 +98,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the Y coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Appelle une méthode
     double y();
 
     /**
@@ -93,7 +108,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the Z coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Appelle une méthode
     double z();
 
     /**
@@ -101,9 +118,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the block X
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int blockX() {
+        // Renvoie une valeur à l'appelant
         return globalToBlock(x());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -111,9 +132,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the block Y
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int blockY() {
+        // Renvoie une valeur à l'appelant
         return globalToBlock(y());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -121,9 +146,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the block Z
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int blockZ() {
+        // Renvoie une valeur à l'appelant
         return globalToBlock(z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -131,9 +160,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the section x coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int sectionX() {
+        // Renvoie une valeur à l'appelant
         return globalToSection(blockX());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -141,9 +174,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the section y coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int sectionY() {
+        // Renvoie une valeur à l'appelant
         return globalToSection(blockY());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -151,9 +188,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the section z coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int sectionZ() {
+        // Renvoie une valeur à l'appelant
         return globalToSection(blockZ());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -161,9 +202,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the chunk X coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int chunkX() {
+        // Renvoie une valeur à l'appelant
         return sectionX();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -171,9 +216,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the chunk Z coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int chunkZ() {
+        // Renvoie une valeur à l'appelant
         return sectionZ();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -181,9 +230,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the region x coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int regionX() {
+        // Renvoie une valeur à l'appelant
         return globalToRegion(blockX());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -191,18 +244,27 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the region z coordinate
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int regionZ() {
+        // Renvoie une valeur à l'appelant
         return globalToRegion(blockZ());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
      * @deprecated use {@link #sectionY()} instead.
      */
+    // Annotation pour l'élément suivant
     @Deprecated
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default int section() {
+        // Renvoie une valeur à l'appelant
         return sectionY();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -211,7 +273,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param operator the operator providing the current X coordinate and returning the new
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> new")
+    // Appelle une méthode
     Point withX(DoubleUnaryOperator operator);
 
     /**
@@ -220,7 +284,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param x the new X coordinate
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point withX(double x);
 
     /**
@@ -229,7 +295,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param operator the operator providing the current Y coordinate and returning the new
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> new")
+    // Appelle une méthode
     Point withY(DoubleUnaryOperator operator);
 
     /**
@@ -238,7 +306,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param y the new Y coordinate
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point withY(double y);
 
     /**
@@ -247,7 +317,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param operator the operator providing the current Z coordinate and returning the new
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract("_ -> new")
+    // Appelle une méthode
     Point withZ(DoubleUnaryOperator operator);
 
     /**
@@ -256,7 +328,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the new Z coordinate
      * @return a new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point withZ(double z);
 
     /**
@@ -267,7 +341,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z to add
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point add(double x, double y, double z);
 
     /**
@@ -276,7 +352,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point add(Point point);
 
     /**
@@ -285,7 +363,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value to add
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point add(double value);
 
     /**
@@ -296,7 +376,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z to subtract
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point sub(double x, double y, double z);
 
     /**
@@ -305,7 +387,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point sub(Point point);
 
     /**
@@ -314,7 +398,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value to subtract
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point sub(double value);
 
     /**
@@ -325,7 +411,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z to multiply
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point mul(double x, double y, double z);
 
     /**
@@ -334,7 +422,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point mul(Point point);
 
     /**
@@ -343,7 +433,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value to multiply
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point mul(double value);
 
     /**
@@ -356,7 +448,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z to divide
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point div(double x, double y, double z);
 
     /**
@@ -367,7 +461,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point div(Point point);
 
     /**
@@ -378,7 +474,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value to divide
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point div(double value);
 
     /**
@@ -387,10 +485,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param face the face
      * @return the new point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Point relative(BlockFace face) {
+        // Appelle une méthode
         final Direction direction = face.toDirection();
+        // Renvoie une valeur à l'appelant
         return add(direction.normalX(), direction.normalY(), direction.normalZ());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -401,10 +504,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return the squared distance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double distanceSquared(double x, double y, double z) {
+        // Appelle une méthode
         final double xDiff = x() - x, yDiff = y() - y, zDiff = z() - z;
+        // Renvoie une valeur à l'appelant
         return (xDiff * xDiff) + (yDiff * yDiff) + (zDiff * zDiff);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -413,9 +521,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point, decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return the squared distance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double distanceSquared(Point point) {
+        // Renvoie une valeur à l'appelant
         return distanceSquared(point.x(), point.y(), point.z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -426,9 +538,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return the distance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double distance(double x, double y, double z) {
+        // Renvoie une valeur à l'appelant
         return Math.sqrt(distanceSquared(x, y, z));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -441,9 +557,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return the distance
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double distance(Point point) {
+        // Renvoie une valeur à l'appelant
         return distance(point.x(), point.y(), point.z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -454,9 +574,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return true if the two positions are similar
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean samePoint(double x, double y, double z) {
+        // Renvoie une valeur à l'appelant
         return x == x() && y == y() && z == z();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -465,9 +589,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare, decomposed by {@link #x()}, {@link #y()} and {@link #z()}
      * @return true if the two positions are similar
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean samePoint(Point point) {
+        // Renvoie une valeur à l'appelant
         return samePoint(point.x(), point.y(), point.z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -480,10 +608,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return true if the two positions are similar within the epsilon
      * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean samePoint(double x, double y, double z, double epsilon) {
+        // Appelle une méthode
         Check.argCondition(epsilon <= 0, "Epsilon must be greater than 0 but found {0}", epsilon);
+        // Renvoie une valeur à l'appelant
         return Math.abs(x - x()) < epsilon && Math.abs(y - y()) < epsilon && Math.abs(z - z()) < epsilon;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -494,9 +627,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @return true if the two positions are similar within the epsilon
      * @throws IllegalArgumentException if epsilon is less than or equal to 0
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean samePoint(Point point, double epsilon) {
+        // Renvoie une valeur à l'appelant
         return samePoint(point.x(), point.y(), point.z(), epsilon);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -507,9 +644,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return true if the two positions are similar within {@link #EPSILON}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean similarPoint(double x, double y, double z) {
+        // Renvoie une valeur à l'appelant
         return samePoint(x, y, z, EPSILON);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -518,9 +659,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare
      * @return true if the two positions are similar within {@link #EPSILON}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean similarPoint(Point point) {
+        // Renvoie une valeur à l'appelant
         return samePoint(point, EPSILON);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -529,9 +674,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return true if the three coordinates are zero
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean isZero() {
+        // Renvoie une valeur à l'appelant
         return x() == 0 && y() == 0 && z() == 0;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -540,9 +689,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare to
      * @return true if 'this' is in the same chunk as {@code point}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean sameChunk(Point point) {
+        // Renvoie une valeur à l'appelant
         return chunkX() == point.chunkX() && chunkZ() == point.chunkZ();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -554,9 +707,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param blockZ the block z
      * @return true if 'this' is in the same block as the provided coordinates
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean sameBlock(int blockX, int blockY, int blockZ) {
+        // Renvoie une valeur à l'appelant
         return blockX() == blockX && blockY() == blockY && blockZ() == blockZ;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -565,9 +722,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the point to compare to
      * @return true if 'this' is in the same block as {@code point}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean sameBlock(Point point) {
+        // Renvoie une valeur à l'appelant
         return sameBlock(point.blockX(), point.blockY(), point.blockZ());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -575,10 +736,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the magnitude
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double lengthSquared() {
+        // Appelle une méthode
         final double x = x(), y = y(), z = z();
+        // Renvoie une valeur à l'appelant
         return (x * x) + (y * y) + (z * z);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -590,9 +756,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the magnitude
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double length() {
+        // Renvoie une valeur à l'appelant
         return Math.sqrt(lengthSquared());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -600,9 +770,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return whether the point is normalized
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default boolean isNormalized() {
+        // Renvoie une valeur à l'appelant
         return Math.abs(lengthSquared() - 1) < EPSILON;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -611,10 +785,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return angle in radians
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double angle(Point point) {
+        // Appelle une méthode
         final double dot = Math.clamp(dot(point) / (length() * point.length()), -1.0, 1.0);
+        // Renvoie une valeur à l'appelant
         return Math.acos(dot);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -624,9 +803,13 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return dot product
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true)
+    // Début d'une méthode/d'un bloc
     default double dot(Point point) {
+        // Renvoie une valeur à l'appelant
         return x() * point.x() + y() * point.y() + z() * point.z();
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -635,7 +818,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the negated point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Appelle une méthode
     Point neg();
 
     /**
@@ -644,7 +829,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the absolute point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Appelle une méthode
     Point abs();
 
     /**
@@ -653,7 +840,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return the minimum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point min(Point point);
 
     /**
@@ -664,7 +853,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return the minimum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point min(double x, double y, double z);
 
     /**
@@ -673,7 +864,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value
      * @return the minimum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point min(double value);
 
     /**
@@ -682,7 +875,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return the maximum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point max(Point point);
 
     /**
@@ -693,7 +888,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param z the z coordinate
      * @return the maximum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Appelle une méthode
     Point max(double x, double y, double z);
 
     /**
@@ -702,7 +899,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param value the value
      * @return the maximum point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point max(double value);
 
     /**
@@ -710,7 +909,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the same point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Appelle une méthode
     Point normalize();
 
     /**
@@ -725,7 +926,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param point the other point
      * @return the cross product point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Appelle une méthode
     Point cross(Point point);
 
     /**
@@ -736,7 +939,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param alpha The alpha value, must be between 0.0 and 1.0
      * @return Linear interpolated point
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Appelle une méthode
     Point lerp(Point point, double alpha);
 
     /**
@@ -744,10 +949,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the converted position or this if already a {@link Pos}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Pos asPos() {
+        // Appelle une méthode
         assert !(this instanceof Pos) : "Should be overridden";
+        // Renvoie une valeur à l'appelant
         return new Pos(x(), y(), z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -757,10 +967,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      * @param pitch the pitch
      * @return the converted position
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default Pos asPos(float yaw, float pitch) {
+        // Appelle une méthode
         assert !(this instanceof Pos) : "Should be overridden";
+        // Renvoie une valeur à l'appelant
         return new Pos(x(), y(), z(), yaw, pitch);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -768,10 +983,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the converted point or this if already a {@link Vec}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Vec asVec() {
+        // Appelle une méthode
         assert !(this instanceof Vec) : "Should be overridden";
+        // Renvoie une valeur à l'appelant
         return new Vec(x(), y(), z());
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -779,9 +999,15 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      *
      * @return the converted block point or this if already a {@link BlockVec}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default BlockVec asBlockVec() {
+        // Appelle une méthode
         assert !(this instanceof BlockVec) : "Should be overridden";
+        // Renvoie une valeur à l'appelant
         return new BlockVec(blockX(), blockY(), blockZ());
+    // Fin d'un bloc/d'une expression
     }
+// Fin d'un bloc/d'une expression
 }

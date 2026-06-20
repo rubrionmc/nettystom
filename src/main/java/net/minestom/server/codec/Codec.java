@@ -1,27 +1,50 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.codec;
 
+// Import d'une classe nécessaire
 import net.kyori.adventure.key.Key;
+// Import d'une classe nécessaire
 import net.kyori.adventure.nbt.BinaryTag;
+// Import d'une classe nécessaire
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+// Import d'une classe nécessaire
 import net.kyori.adventure.text.Component;
+// Import d'une classe nécessaire
 import net.kyori.adventure.text.format.Style;
+// Import d'une classe nécessaire
 import net.kyori.adventure.util.TriState;
+// Import d'une classe nécessaire
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
+// Import d'une classe nécessaire
 import net.minestom.server.coordinate.Point;
+// Import d'une classe nécessaire
 import net.minestom.server.registry.Registries;
+// Import d'une classe nécessaire
 import net.minestom.server.registry.Registry;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.Either;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.ThrowingFunction;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.UUIDUtils;
+// Import d'une classe nécessaire
 import net.minestom.server.utils.Unit;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Contract;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.UnknownNullability;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Unmodifiable;
 
+// Import d'une classe nécessaire
 import java.util.*;
+// Import d'une classe nécessaire
 import java.util.concurrent.ConcurrentHashMap;
+// Import d'une classe nécessaire
 import java.util.function.Function;
+// Import d'une classe nécessaire
 import java.util.function.Supplier;
 
 /**
@@ -49,6 +72,7 @@ import java.util.function.Supplier;
  *
  * @param <T> The type to be represented by this codec, nullable T will provide nullable results.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>, Decoder<T> {
 
     /**
@@ -58,6 +82,7 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Useful when dealing with objects that have the same type required as their transcoder
      * for example NBT and JSON.
      */
+    // Déclaration de type (classe/interface/enum/record)
     sealed interface RawValue permits CodecImpl.RawValueImpl {
         /**
          * Creates a RawValue instance
@@ -67,9 +92,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
          * @param <D>   The Object type
          * @return the new raw value instance
          */
+        // Annotation pour l'élément suivant
         @Contract(pure = true, value = "_, _ -> new")
+        // Début d'une méthode/d'un bloc
         static <D> RawValue of(Transcoder<D> coder, D value) {
+            // Renvoie une valeur à l'appelant
             return new CodecImpl.RawValueImpl<>(coder, value);
+        // Fin d'un bloc/d'une expression
         }
 
         /**
@@ -79,57 +108,85 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
          * @param <D>   the resultant type; transcoder type.
          * @return the {@link Result} of converting to {@code coder}.
          */
+        // Appelle une méthode
         <D> Result<D> convertTo(Transcoder<D> coder);
+    // Fin d'un bloc/d'une expression
     }
 
+    // Appelle une méthode
     Codec<RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
 
+    // Appelle une méthode
     Codec<Unit> UNIT = StructCodec.struct(Unit.INSTANCE);
 
+    // Appelle une méthode
     Codec<Boolean> BOOLEAN = new PrimitiveImpl<>(Transcoder::createBoolean, Transcoder::getBoolean);
 
+    // Appelle une méthode
     Codec<TriState> TRI_STATE = new CodecImpl.TriStateImpl();
 
+    // Appelle une méthode
     Codec<Byte> BYTE = new PrimitiveImpl<>(Transcoder::createByte, Transcoder::getByte);
 
+    // Appelle une méthode
     Codec<Short> SHORT = new PrimitiveImpl<>(Transcoder::createShort, Transcoder::getShort);
 
+    // Appelle une méthode
     Codec<Integer> INT = new PrimitiveImpl<>(Transcoder::createInt, Transcoder::getInt);
 
+    // Appelle une méthode
     Codec<Long> LONG = new PrimitiveImpl<>(Transcoder::createLong, Transcoder::getLong);
 
+    // Appelle une méthode
     Codec<Float> FLOAT = new PrimitiveImpl<>(Transcoder::createFloat, Transcoder::getFloat);
 
+    // Appelle une méthode
     Codec<Double> DOUBLE = new PrimitiveImpl<>(Transcoder::createDouble, Transcoder::getDouble);
 
+    // Appelle une méthode
     Codec<String> STRING = new PrimitiveImpl<>(Transcoder::createString, Transcoder::getString);
 
+    // Appelle une méthode
     Codec<Key> KEY = STRING.transform(Key::key, Key::asString);
 
+    // Appelle une méthode
     Codec<byte[]> BYTE_ARRAY = new PrimitiveImpl<>(Transcoder::createByteArray, Transcoder::getByteArray);
 
+    // Appelle une méthode
     Codec<int[]> INT_ARRAY = new PrimitiveImpl<>(Transcoder::createIntArray, Transcoder::getIntArray);
 
+    // Appelle une méthode
     Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
 
+    // Appelle une méthode
     Codec<UUID> UUID = Codec.INT_ARRAY.transform(UUIDUtils::intArrayToUuid, UUIDUtils::uuidToIntArray);
 
+    // Appelle une méthode
     Codec<UUID> UUID_STRING = STRING.transform(java.util.UUID::fromString, java.util.UUID::toString);
 
+    // Appelle une méthode
     Codec<UUID> UUID_COERCED = UUID.orElse(UUID_STRING);
 
+    // Affecte une valeur
     Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
 
+    // Affecte une valeur
     Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
 
+    // Appelle une méthode
     Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
+    // Appelle une méthode
     Codec<Point> VECTOR3D = new CodecImpl.Vector3DImpl();
 
+    // Affecte une valeur
     Codec<BinaryTag> NBT = RAW_VALUE.transform(
+            // Instruction de code
             value -> value.convertTo(Transcoder.NBT).orElseThrow(),
+            // Appelle une méthode
             value -> RawValue.of(Transcoder.NBT, value));
 
+    // Appelle une méthode
     StructCodec<CompoundBinaryTag> NBT_COMPOUND = new CodecImpl.CompoundBinaryTagImpl();
 
     /**
@@ -142,12 +199,19 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <E>       Enum type, E must be an enum
      * @return the codec enum
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     static <E extends Enum<E>> Codec<E> Enum(Class<E> enumClass) {
+        // Appelle une méthode
         Objects.requireNonNull(enumClass, "Enum class cannot be null");
+        // Renvoie une valeur à l'appelant
         return STRING.transform(
+                // Instruction de code
                 value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
+                // Appelle une méthode
                 value -> value.name().toLowerCase(Locale.ROOT));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -159,9 +223,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>  The codec Type
      * @return the recursive codec
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     static <T> Codec<T> Recursive(Function<Codec<T>, Codec<T>> func) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.RecursiveImpl<>(func).delegate;
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -174,9 +242,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>      the codec type
      * @return the supplier
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     static <T> Codec<T> ForwardRef(Supplier<Codec<T>> supplier) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.ForwardRefImpl<>(supplier);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -188,14 +260,23 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @deprecated Use {@link #RegistryTaggedUnion(String, Registry, Function)} instead.
      * Shortcut for {@link Codec#RegistryTaggedUnion(Registries.Selector, Function, String)}
      */
+    // Annotation pour l'élément suivant
     @Deprecated
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             Registry<StructCodec<? extends T>> registry,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter,
+            // Instruction de code
             String key
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return Codec.RegistryTaggedUnion(key, registry, serializerGetter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -210,14 +291,23 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * Registry selectors will be used to lookup values of codecs of {@link T}.
      * Then will be used to map to object {@link T} from {@code key}
      */
+    // Annotation pour l'élément suivant
     @Deprecated
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             Registries.Selector<StructCodec<? extends T>> registrySelector,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter,
+            // Instruction de code
             String key
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return Codec.RegistryTaggedUnion(key, registrySelector, serializerGetter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -229,12 +319,19 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             Registry<StructCodec<? extends T>> registry,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return Codec.RegistryTaggedUnion("type", registry, serializerGetter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -247,14 +344,23 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the struct codec type.
      * @return a {@link StructCodec}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             String key,
+            // Instruction de code
             Registry<StructCodec<? extends T>> registry,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter
+    // Début d'une méthode/d'un bloc
     ) {
+        // Appelle une méthode
         Objects.requireNonNull(registry, "registry");
+        // Renvoie une valeur à l'appelant
         return Codec.RegistryTaggedUnion(key, (ignored) -> registry, serializerGetter); // Stable Value/Lazy Constant
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -266,12 +372,19 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             Registries.Selector<StructCodec<? extends T>> registrySelector,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.RegistryTaggedUnionImpl<>("type", registrySelector, serializerGetter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -286,13 +399,21 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <T>              the codec type
      * @return a {@link StructCodec} bidirectionally mapping values of {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Instruction de code
     static <T> StructCodec<T> RegistryTaggedUnion(
+            // Instruction de code
             String key,
+            // Instruction de code
             Registries.Selector<StructCodec<? extends T>> registrySelector,
+            // Instruction de code
             Function<T, StructCodec<? extends T>> serializerGetter
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.RegistryTaggedUnionImpl<>(key, registrySelector, serializerGetter);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -304,9 +425,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>        the right type
      * @return a {@link Codec} with {@link Either} of {@link L} and {@link R}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     static <L, R> Codec<Either<L, R>> Either(Codec<L> leftCodec, Codec<R> rightCodec) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.EitherImpl<>(leftCodec, rightCodec);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -318,9 +443,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>        the right type
      * @return a {@link StructCodec} with {@link Either} of {@link L} and {@link R}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     static <L, R> StructCodec<Either<L, R>> EitherStruct(StructCodec<L> leftCodec, StructCodec<R> rightCodec) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.EitherStructImpl<>(leftCodec, rightCodec);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -328,9 +457,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      *
      * @return the optional codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Nullable T> optional() {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.OptionalImpl<>(this, null);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -343,10 +476,14 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @return the optional codec of type {@link T}
      * @throws NullPointerException if defaultValue is null, use {@link #optional()} instead.
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@UnknownNullability T> optional(T defaultValue) {
         // We really have no idea what nullability this will have as optional still accepts null values, but the default value could never be null
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.OptionalImpl<>(this, Objects.requireNonNull(defaultValue, "Default value cannot be null"));
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -357,9 +494,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <S>  the type
      * @return the transforming codec of {@link S}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <S extends @UnknownNullability Object> Codec<S> transform(ThrowingFunction<T, S> to, ThrowingFunction<S, T> from) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.TransformImpl<>(this, to, from);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -368,9 +509,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param maxSize the max size of the list before returning an error result.
      * @return the list codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable List<T>> list(int maxSize) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.ListImpl<>(this, maxSize);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -378,9 +523,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      *
      * @return the unbounded list codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable List<T>> list() {
+        // Renvoie une valeur à l'appelant
         return list(Integer.MAX_VALUE);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -389,12 +538,19 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param maxSize the max size of the list before returning an error result
      * @return the list codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable @Nullable List<T>> listOrSingle(int maxSize) {
+        // Renvoie une valeur à l'appelant
         return Either(Codec.this.list(maxSize), Codec.this).transform(
+                // Instruction de code
                 either -> either.unify(Function.identity(), List::of),
+                // Instruction de code
                 list -> list.size() == 1 ? Either.right(list.getFirst()) : Either.left(list)
+        // Fin d'un bloc/d'une expression
         );
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -403,9 +559,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      *
      * @return the list codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable @Nullable List<T>> listOrSingle() {
+        // Renvoie une valeur à l'appelant
         return this.listOrSingle(Integer.MAX_VALUE);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -414,9 +574,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param maxSize the max size before returning an error result
      * @return the set codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable Set<T>> set(int maxSize) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.SetImpl<>(Codec.this, maxSize);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -424,9 +588,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      *
      * @return the set codec of type {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "-> new")
+    // Début d'une méthode/d'un bloc
     default Codec<@Unmodifiable Set<T>> set() {
+        // Renvoie une valeur à l'appelant
         return set(Integer.MAX_VALUE);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -437,9 +605,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValue(Codec<V> valueCodec, int maxSize) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -449,9 +621,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>        the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValue(Codec<V> valueCodec) {
+        // Renvoie une valeur à l'appelant
         return mapValue(valueCodec, Integer.MAX_VALUE);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -464,10 +640,15 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>     the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize, boolean cached) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.TypedMapImpl<>(Codec.this, mapper,
+                // Appelle une méthode
                 maxSize, cached ? new ConcurrentHashMap<>() : null);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -479,9 +660,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>     the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, int maxSize) {
+        // Renvoie une valeur à l'appelant
         return mapValueTyped(mapper, maxSize, false);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -493,9 +678,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>    the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper, boolean cached) {
+        // Renvoie une valeur à l'appelant
         return mapValueTyped(mapper, Integer.MAX_VALUE, cached);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -506,9 +695,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <V>    the value type
      * @return the map codec of type {@link T} and {@link V}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default <V> Codec<@Unmodifiable Map<T, V>> mapValueTyped(Function<T, Codec<V>> mapper) {
+        // Renvoie une valeur à l'appelant
         return mapValueTyped(mapper, Integer.MAX_VALUE, false);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -521,9 +714,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <R> StructCodec<R> unionType(Function<T, StructCodec<? extends R>> serializers, Function<R, ? extends T> keyFunc) {
+        // Renvoie une valeur à l'appelant
         return unionType("type", serializers, keyFunc);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -537,13 +734,21 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param <R>         the return type; {@link T} or a subclass
      * @return the struct codec union of {@link R}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _, _ -> new")
+    // Instruction de code
     default <R> StructCodec<R> unionType(
+            // Instruction de code
             String keyField,
+            // Instruction de code
             Function<T, StructCodec<? extends R>> serializers,
+            // Instruction de code
             Function<R, ? extends T> keyFunc
+    // Début d'une méthode/d'un bloc
     ) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.UnionImpl<>(keyField, this, serializers, keyFunc);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -555,9 +760,13 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param other the other codec
      * @return the or else codec of {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_ -> new")
+    // Début d'une méthode/d'un bloc
     default Codec<T> orElse(Codec<T> other) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.OrElseImpl<>(this, other);
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -570,11 +779,18 @@ public interface Codec<T extends @UnknownNullability Object> extends Encoder<T>,
      * @param mapper the mapper to transform the error into a value of {@link T}
      * @return the or else codec of {@link T}
      */
+    // Annotation pour l'élément suivant
     @Contract(pure = true, value = "_, _ -> new")
+    // Début d'une méthode/d'un bloc
     default <S> Codec<T> orElse(Codec<S> other, ThrowingFunction<S, T> mapper) {
+        // Renvoie une valeur à l'appelant
         return new CodecImpl.OrElseImpl<>(this, other.transform(mapper, _ -> {
+            // Lève une exception
             throw new UnsupportedOperationException("unreachable");
+        // Instruction de code
         }));
+    // Fin d'un bloc/d'une expression
     }
 
+// Fin d'un bloc/d'une expression
 }

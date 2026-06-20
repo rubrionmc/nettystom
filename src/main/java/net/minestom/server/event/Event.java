@@ -1,3 +1,4 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.event;
 
 /**
@@ -5,5 +6,7 @@ package net.minestom.server.event;
  * <p>
  * Called using {@link EventDispatcher#call(Event)}.
  */
+// Déclaration de type (classe/interface/enum/record)
 public interface Event {
+// Fin d'un bloc/d'une expression
 }

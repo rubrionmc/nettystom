@@ -1,6 +1,9 @@
+// Déclaration du paquet de ce fichier
 package net.minestom.server.codec;
 
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.Nullable;
+// Import d'une classe nécessaire
 import org.jetbrains.annotations.UnknownNullability;
 
 /**
@@ -23,7 +26,9 @@ import org.jetbrains.annotations.UnknownNullability;
  *
  * @param <T> the value type
  */
+// Annotation pour l'élément suivant
 @FunctionalInterface
+// Déclaration de type (classe/interface/enum/record)
 public interface Encoder<T extends @UnknownNullability Object> {
 
     /**
@@ -32,13 +37,21 @@ public interface Encoder<T extends @UnknownNullability Object> {
      * @param <T> the encoder type
      * @return the empty encoder
      */
+    // Début d'une méthode/d'un bloc
     static <T> Encoder<T> empty() {
+        // Renvoie une valeur à l'appelant
         return new Encoder<>() {
+            // Annotation pour l'élément suivant
             @Override
+            // Début d'une méthode/d'un bloc
             public <D> Result<D> encode(Transcoder<D> coder, @Nullable T value) {
+                // Renvoie une valeur à l'appelant
                 return new Result.Ok<>(coder.createNull());
+            // Fin d'un bloc/d'une expression
             }
+        // Fin d'un bloc/d'une expression
         };
+    // Fin d'un bloc/d'une expression
     }
 
     /**
@@ -51,6 +64,8 @@ public interface Encoder<T extends @UnknownNullability Object> {
      * @param <D>   The resultant type
      * @return the {@link Result} of the encoding with its type determined by the transcoder
      */
+    // Appelle une méthode
     <D> Result<D> encode(Transcoder<D> coder, @Nullable T value);
 
+// Fin d'un bloc/d'une expression
 }
