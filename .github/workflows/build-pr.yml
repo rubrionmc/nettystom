@@ -154,7 +154,7 @@ jobs:
         if: needs.native-test.outputs.metadata-updated == 'true'
         run: ./gradlew metadataCopy
       - name: Publish Artifacts
-        if: github.repository == 'Minestom/Minestom'
+        if: github.repository == 'rubrionmc/nettystom'
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-SNAPSHOT
           SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
